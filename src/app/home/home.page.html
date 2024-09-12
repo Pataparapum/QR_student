@@ -6,28 +6,32 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div id="Container"> 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
+<ion-content>
+  <div id="container">
+    <div> 
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-text>
+              Bienvenido a Qr de asistencia
+            </ion-text>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
           <ion-text>
-            Bienvenido a Qr de asistencia
+            Qr de asistencia es una app para poder registrar tu asistencia en clases desde tu celular,
+            permitiendo que tu te encarges de tu asistencia, y el profesor solo se preocupe de la clase
           </ion-text>
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-text>
-          Qr de asistencia es una app para poder registrar tu asistencia en clases desde tu celular,
-          permitiendo que tu te encarges de tu asistencia, y el profesor solo se preocupe de la clases
-        </ion-text>
-      </ion-card-content>
-    </ion-card>
-  </div>
-
-  <div>
-    <ion-button
-     shape="round"
-     [routerLink]="['/login']">Login</ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div>
+      <ion-button
+       shape="round"
+       [routerLink]="['/login']">Login</ion-button>
+    </div>
+    <div>
+      <ion-text>Olvidaste tu contraseña, recuperala </ion-text> <ion-text color="primary" [routerLink]="['/login']">aqui...</ion-text>
+    </div>
   </div>
 </ion-content>
