@@ -1,37 +1,37 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Inicio</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div id="container">
-    <div> 
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>
-            <ion-text>
-              Bienvenido a Qr de asistencia
-            </ion-text>
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-text>
-            Qr de asistencia es una app para poder registrar tu asistencia en clases desde tu celular,
-            permitiendo que tu te encarges de tu asistencia, y el profesor solo se preocupe de la clase
-          </ion-text>
-        </ion-card-content>
-      </ion-card>
-    </div>
-    <div>
-      <ion-button
-       shape="round"
-       [routerLink]="['/login']">Login</ion-button>
-    </div>
-    <div>
-      <ion-text>Olvidaste tu contraseña, recuperala </ion-text> <ion-text color="primary" [routerLink]="['/login']">aqui...</ion-text>
+  <div id="container" style="text-align: center; padding: 20px;">
+    <h1>Bienvenido a QR de asistencia</h1>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-text>Escanea y regístrate</ion-text>
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-text>
+          QR de asistencia es una app que te permite registrar tu asistencia en clases desde tu celular.
+          Ahora podrás encargarte de tu asistencia mientras el profesor se concentra en la clase.
+          Para registrar asistencia, primero debes iniciar sesión usando el botón a continuación:
+        </ion-text>
+        
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button shape="round" expand="block" [routerLink]="['/login']" style="margin-top: 20px;">
+      Iniciar Sesión
+    </ion-button>
+
+    <div style="margin-top: 10px;">
+      <ion-text>¿Olvidaste tu contraseña? Recuperarla </ion-text>
+      <ion-text color="primary" [routerLink]="['/login']">aquí</ion-text>
     </div>
   </div>
 </ion-content>
