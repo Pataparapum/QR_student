@@ -1,0 +1,12 @@
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .logo-img {
+    width: 200px;
+    height: auto;
+    align-items: center;
+  }
