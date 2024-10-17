@@ -12,6 +12,7 @@ export class HomePage {
 
   navigateToAbout() {
     this.router.navigate(['/login']);
+    
   }
 
   ngOnInit() {

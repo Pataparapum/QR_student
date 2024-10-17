@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { userInterface } from './login.interface';
+import { StorageService } from '../Services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginPage implements OnInit {
 
   user: userInterface | null = null
 
-  constructor(private router:Router) {
+  constructor(private router:Router, private storage:StorageService) {
     this.userForm.userName = "";
     this.userForm.password = "";
   }
