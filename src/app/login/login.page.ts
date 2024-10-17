@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { userInterface } from './login.interface';
+import { StorageService } from '../Services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -16,10 +17,7 @@ export class LoginPage implements OnInit {
 
   user: userInterface | null = null
 
-  constructor(private router:Router) {
-    this.userForm.userName = "";
-    this.userForm.password = "";
-  }
+  constructor(private router:Router, private storage:StorageService) {}
 
   navigateToAbout() {
     this.router.navigate(['/home']);
@@ -34,8 +32,6 @@ export class LoginPage implements OnInit {
     let error:HTMLParagraphElement = <HTMLParagraphElement> document.getElementById('error');
     error.innerText = "";
     event.preventDefault
-    console.log(this.userForm.userName.length);
-    console.log(this.userForm.password.length);
 
     if(this.userForm.userName.length > 12 || this.userForm.userName.length < 6) {
       let message = "el largo del nombre debe ser mayor a 6 y menor o igual a 12"
@@ -50,6 +46,9 @@ export class LoginPage implements OnInit {
         userName : this.userForm.userName,
         password: this.userForm.password
       }
+
+      this.storage.set("usuario", this.user);
+
       this.navigateToAbout()
     } 
   }

@@ -1,3 +1,4 @@
 {
+  "material-icon-theme.activeIconPack": "angular",
   "typescript.preferences.autoImportFileExcludePatterns": ["@ionic/angular/common", "@ionic/angular/standalone"]
 }

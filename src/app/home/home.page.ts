@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { Animation, createAnimation, IonCard } from '@ionic/angular';
+import { AnimationController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -7,8 +9,15 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  @ViewChild(IonCard, { read: ElementRef }) card!: ElementRef<HTMLIonCardElement>;
 
-  constructor(private router:Router) {}
+  private animation?: Animation;
+
+  constructor(private router:Router, private animationCrl:AnimationController) {
+
+  }
+    
+
 
   navigateToAbout() {
     this.router.navigate(['/login']);
@@ -17,5 +26,4 @@ export class HomePage {
   ngOnInit() {
     
   }
-
 }
