@@ -3,5 +3,4 @@ interface userInterface {
     password:string
 }
 
-
 export {userInterface}
