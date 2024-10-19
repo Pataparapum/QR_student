@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>classroom</ion-title>
+    <ion-button slot="end" [routerLink]="['/login']">login </ion-button> 
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">classroom</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+
+  <div id="container" style="text-align: center; padding: 20px;">
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <ion-text>Escanea codigo QR</ion-text>
+        </ion-card-title>
+      </ion-card-header>
+      <img src="assets\icon\QR.png" alt="QR" class="logo-img">
+      <ion-card-content>
+        <ion-text>
+          QR de asistencia es una app que te permite registrar tu asistencia en clases desde tu celular.
+          Ahora podrás encargarte de tu asistencia mientras el profesor se concentra en la clase.
+          Para registrar asistencia, primero debes iniciar sesión usando el botón a continuación:
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+  
+</ion-content>

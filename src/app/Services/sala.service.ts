@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SALA } from '../sala-clases/salaInterface';
+import { SALA } from '../sala-clases/interface/salaInterface';
+import { ALUMNO } from '../sala-clases/interface/alumnoInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -28,13 +29,33 @@ export class SalaService {
     return this.salaArray;
   }
 
-  getWithId(id:number) {
+  getSalaWithId(id:number):SALA | null {
     for(let sala of this.salaArray) {
       if (sala.id == id) {
-        return sala;
+        let s:SALA = sala;
+        return s;
       }
     }
+    return null;
+  }
 
-    return "No hay sala"
+  addAlumno(id:number, alumno:ALUMNO){
+    let sala = this.getSalaWithId(id)
+
+    sala?.alumnos?.push(alumno);
+
+    console.log(sala?.alumnos);
+    
+  }
+
+  findAlumnoForId(alumnoId:number, salaId:number):ALUMNO  | null {
+    let sala = this.getSalaWithId(salaId)!;
+    for (let alumno of sala?.alumnos!) {
+      if(alumno.id == alumnoId) {
+        let alumnoActual = alumno;
+        return alumnoActual;
+      }
+    }
+    return null;
   }
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card'
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,7 +14,8 @@ import { SalaClasesPage } from './sala-clases.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    SalaClasesPageRoutingModule
+    SalaClasesPageRoutingModule,
+    MatCardModule
   ],
   declarations: [SalaClasesPage]
 })

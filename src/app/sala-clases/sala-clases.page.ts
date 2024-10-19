@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { SALA } from './salaInterface';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { SALA } from './interface/salaInterface';
 import { SalaService } from '../Services/sala.service';
+import { MatCard } from '@angular/material/card';
+import { Event } from '@angular/router';
+import { ALUMNO } from './interface/alumnoInterface';
+import { AlumnosControlService } from '../Services/alumnos-control.service';
 
 @Component({
   selector: 'app-sala-clases',
@@ -19,12 +23,10 @@ export class SalaClasesPage implements OnInit {
 
 
   //Atributos alumnos
-  alumnos: { nombre: string; presente: boolean }[] = [];
-  nombreAlumno?: string;
+  nombreAlumno: string = "";
 
-  //Atributos asistencia
 
-  constructor(private salaDB:SalaService) {}
+  constructor(private salaDB:SalaService, private alumnoControl:AlumnosControlService) {}
 
   ngOnInit() {
   }
@@ -32,28 +34,30 @@ export class SalaClasesPage implements OnInit {
   crearSala(){
     let nuevaSala:SALA =  {
       nombre:this.sala.nombre,
-      id:this.sala.id
+      id:this.sala.id,
+      alumnos:[]
     }
 
-    this.salaDB.push(nuevaSala);
-    console.log(this.salaDB.get());    
-
+    this.salaDB.push(nuevaSala);   
     this.salaArray = this.salaDB.get();
   }
 
-  agregarAlumnos(){
-    if(this.nombreAlumno){
-      this.alumnos.push({nombre: this.nombreAlumno, presente: false});
-      this.nombreAlumno = "";
-    }
+  agregarAlumnos(event:any){
+    let button:HTMLElement = event.target!;
+    let id:number = parseInt(button.parentElement?.parentElement?.id!);
+    let alumno:ALUMNO = this.alumnoControl.crearAlumno(this.nombreAlumno, id);
+    
 
+    this.salaDB.addAlumno(id, alumno);
+
+    this.alumnoControl.incrementId()
   }
 
-  marcarAsistencia(nombre: string) {
-    const alumno = this.alumnos.find(a => a.nombre === nombre);
+  marcarAsistencia(id:number, salaId:number) {
+
+    let alumno = this.salaDB.findAlumnoForId(id, salaId);
     if (alumno) {
-      alumno.presente = !alumno.presente; // Cambiar el estado de presente
-      console.log(alumno)
+      alumno.asistencia = true;
     }
   }
 
