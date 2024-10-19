@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { SalaClasesPageRoutingModule } from './sala-clases-routing.module';
 
 import { SalaClasesPage } from './sala-clases.page';
+import { AlumnoComponent } from './alumno/alumno.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { SalaClasesPage } from './sala-clases.page';
     FormsModule,
     IonicModule,
     SalaClasesPageRoutingModule,
-    MatCardModule
+    MatCardModule,
+    AlumnoComponent
   ],
   declarations: [SalaClasesPage]
 })

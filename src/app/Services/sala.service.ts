@@ -41,11 +41,8 @@ export class SalaService {
 
   addAlumno(id:number, alumno:ALUMNO){
     let sala = this.getSalaWithId(id)
-
-    sala?.alumnos?.push(alumno);
-
-    console.log(sala?.alumnos);
     
+    sala?.alumnos?.push(alumno);
   }
 
   findAlumnoForId(alumnoId:number, salaId:number):ALUMNO  | null {

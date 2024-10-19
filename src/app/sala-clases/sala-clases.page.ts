@@ -42,26 +42,13 @@ export class SalaClasesPage implements OnInit {
     this.salaArray = this.salaDB.get();
   }
 
-  agregarAlumnos(event:any){
-    let button:HTMLElement = event.target!;
-    let id:number = parseInt(button.parentElement?.parentElement?.id!);
-    let alumno:ALUMNO = this.alumnoControl.crearAlumno(this.nombreAlumno, id);
-    
-
-    this.salaDB.addAlumno(id, alumno);
-
-    this.alumnoControl.incrementId()
-  }
-
   marcarAsistencia(id:number, salaId:number) {
 
     let alumno = this.salaDB.findAlumnoForId(id, salaId);
     if (alumno) {
       alumno.asistencia = true;
     }
+    
   }
-
-
-
 
 }

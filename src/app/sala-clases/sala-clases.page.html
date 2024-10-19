@@ -15,31 +15,24 @@
   </div>
   
   @if (salaArray.length > 0) {
-    @for (s of salaArray; track sala.id) {
+    @for (s of salaArray; let i = $index; track i) {
       <mat-card class="cardSala" id="{{s.id}}" card>
         <mat-card-header>
           <mat-card-title>Sala: {{s.nombre}} (ID: {{s.id}})</mat-card-title>
         </mat-card-header>  
         <mat-card-content>
-          <ion-item>
-            <ion-label position="floating">Nombre del Alumno</ion-label>
-            <ion-input [(ngModel)] = "nombreAlumno"></ion-input>
-          </ion-item>
-          <ion-button (click)="agregarAlumnos($event)">Agregar Alumno</ion-button>
-        
-          @if(s.alumnos) {
-            <ion-list>
-              @for(alumno of s.alumnos; track alumno.id) {
+          <app-alumno [salaID]="s.id"></app-alumno>  
+          @if (s.alumnos) {
+            @for (alumno of s.alumnos; let i = $index; track i) {
+              <ion-list>
                 <ion-item>
-                  <ion-label>{{ alumno.nombre }}</ion-label>
+                  <ion-label>{{alumno.nombre}}</ion-label>
                   <ion-checkbox slot="end" (ionChange)="marcarAsistencia(alumno.id, alumno.idSala)" [checked]="alumno.asistencia"></ion-checkbox>
                 </ion-item>
-              }
-              
-            </ion-list>
+            </ion-list>   
+            } 
           }
           
-               
         </mat-card-content>
       </mat-card>
     }
