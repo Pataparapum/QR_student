@@ -1,27 +1,16 @@
 import { Injectable } from '@angular/core';
-import { userInterface } from '../login/login.interface';
-import { StorageService } from './storage.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticateService {
+  constructor() {}
 
-  auth:boolean
+  // Método para autenticar al usuario
+  login(email: string, password: string): boolean {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find((u: { email: string; password: string }) => u.email === email && u.password === password);
 
-  constructor(private storage:StorageService) { this.auth = false}
-
-  async Authenticar(user:string) {
-    let val:userInterface = await this.storage.get(user);
-    if (val) {
-      this.auth = true;
-    }
-  }
-
-  isAuthenticate():boolean {
-    if(this.auth) {
-      return true;
-    }
-    return false;
+    return !!user; // Devuelve true si el usuario existe, false en caso contrario
   }
 }

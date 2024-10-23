@@ -6,14 +6,13 @@
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Menu</ion-title>
-        
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding"></ion-content>
   </div>
-  <ion-router-outlet id="main"></ion-router-outlet>
 
-  <ion-menu contentId="main-content">
+
+  <ion-menu side="start" menuId="m1" contentId="main-content">
     <ion-header>
       <ion-toolbar>
         <ion-title>Menu Content</ion-title>
@@ -32,6 +31,9 @@
       </ion-list>
     </ion-content>
   </ion-menu>
+
+    
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 
 
 </ion-app>

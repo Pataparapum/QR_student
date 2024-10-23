@@ -1,13 +1,63 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>registro</ion-title>
+    <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">registro</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid class="ion-padding">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col size-md="6" size-lg="5" size-xs="12">
+        <ion-card>
+          <ion-card-content>
+            <div class="ion-text-center">
+              <ion-icon name="person-add-outline" size="large"></ion-icon>
+              <h1 class="ion-margin-top">Registro</h1>
+            </div>
+
+            <h5 class="ion-text-center ion-margin-bottom">Crea tu cuenta</h5>
+
+            <!-- Mostrar mensajes de error -->
+            <div *ngIf="errorMessage" class="ion-padding" style="color: red;">
+              {{ errorMessage }}
+            </div>
+
+            <!-- Campo de Nombre -->
+            <ion-item>
+              <ion-label position="floating">Nombre</ion-label>
+              <ion-input [(ngModel)]="registerForm.fullName" type="text" required></ion-input>
+            </ion-item>
+
+            <!-- Campo de Correo Electrónico -->
+            <ion-item>
+              <ion-label position="floating">Correo Electrónico</ion-label>
+              <ion-input [(ngModel)]="registerForm.email" type="email" required></ion-input>
+            </ion-item>
+
+            <!-- Campo de Contraseña -->
+            <ion-item>
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input [(ngModel)]="registerForm.password" type="password" required></ion-input>
+            </ion-item>
+
+            <!-- Campo de Confirmación de Contraseña -->
+            <ion-item>
+              <ion-label position="floating">Confirmar Contraseña</ion-label>
+              <ion-input [(ngModel)]="registerForm.confirmPassword" type="password" required></ion-input>
+            </ion-item>
+
+            <!-- Botón de Registrarse -->
+            <ion-button expand="block" color="primary" class="ion-margin-top" (click)="register($event)">
+              Registrarse
+            </ion-button>
+
+            <!-- Botón de Volver -->
+            <ion-button expand="block" fill="clear" color="medium" [routerLink]="['/login']">
+              Volver
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
