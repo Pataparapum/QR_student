@@ -17,7 +17,7 @@ export class StorageService {
     this._storage = storage;
   }
 
-  public set(key:string, value:userInterface) {
+  public set<t>(key:string, value:t) {
     this._storage?.set(key, value)
   }
 

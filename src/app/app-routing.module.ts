@@ -1,3 +1,4 @@
+import { SalaClasesPage } from './sala-clases/sala-clases.page';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'registro',
     loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
+  },
+  {
+    path: 'salas',
+    loadChildren: () =>import('./sala-clases/sala-clases.module').then( m => m.SalaClasesPageModule)
   }
 
 ];

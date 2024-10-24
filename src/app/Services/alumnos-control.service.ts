@@ -18,6 +18,8 @@ export class AlumnosControlService {
       idSala:salaId,
       asistencia: false
     };
+
+
     return alumno;
   }
 

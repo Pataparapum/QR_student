@@ -1,6 +1,8 @@
+import { Storage } from '@ionic/storage-angular';
 import { Injectable } from '@angular/core';
 import { SALA } from '../sala-clases/interface/salaInterface';
 import { ALUMNO } from '../sala-clases/interface/alumnoInterface';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class SalaService {
 
   salaArray:SALA[] = [];
 
-  constructor() { }
+  constructor(private Storage:StorageService) { }
 
   push(sala:SALA) {
     if (this.id == 0) {
@@ -22,6 +24,9 @@ export class SalaService {
       this.salaArray.push(sala);
       this.id ++
     }
+
+    
+    this.Storage.set<SALA[]>('salas', this.salaArray );
     
   }
 
