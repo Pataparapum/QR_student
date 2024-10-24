@@ -1,5 +1,7 @@
+import { SalaService } from 'src/app/Services/sala.service';
 import { Injectable } from '@angular/core';
 import { ALUMNO } from '../sala-clases/interface/alumnoInterface';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Injectable({
@@ -11,10 +13,11 @@ export class AlumnosControlService {
 
   constructor() { }
 
-  crearAlumno(nombre:string, salaId:number): ALUMNO {
+  crearAlumno(nombre:string, salaId:string): ALUMNO {
+
     let alumno:ALUMNO = {
       nombre:nombre,
-      id: this.id,
+      id: uuidv4(),
       idSala:salaId,
       asistencia: false
     };
@@ -22,8 +25,5 @@ export class AlumnosControlService {
 
     return alumno;
   }
-
-  incrementId() {
-    this.id++;
-  }
+    
 }

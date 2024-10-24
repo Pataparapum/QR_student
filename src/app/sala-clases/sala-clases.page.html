@@ -18,15 +18,15 @@
     @for (s of salaArray; let i = $index; track i) {
       <mat-card class="cardSala" id="{{s.id}}" card>
         <mat-card-header>
-          <mat-card-title>Sala: {{s.nombre}} (ID: {{s.id}})</mat-card-title>
+          <mat-card-title>Sala: {{s.nombre}} index: = {{i}}</mat-card-title>
         </mat-card-header>  
         <mat-card-content>
-          <app-alumno [salaID]="s.id"></app-alumno>  
+          <app-alumno [salaID]="s.id" (newEven)="setSala($event)"></app-alumno>  
           @if (s.alumnos) {
             @for (alumno of s.alumnos; let i = $index; track i) {
               <ion-list>
                 <ion-item>
-                  <ion-label>{{alumno.nombre}}</ion-label>
+                  <ion-label>{{alumno.nombre}}      index = {{i}}</ion-label>
                   <ion-checkbox slot="end" (ionChange)="marcarAsistencia(alumno.id, alumno.idSala)" [checked]="alumno.asistencia"></ion-checkbox>
                 </ion-item>
             </ion-list>   

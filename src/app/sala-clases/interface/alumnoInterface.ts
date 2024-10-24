@@ -1,6 +1,6 @@
 interface ALUMNO {
-    id:number
-    idSala:number
+    id:string
+    idSala:string
     nombre:string
     asistencia:boolean
 }

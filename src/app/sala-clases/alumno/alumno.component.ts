@@ -1,10 +1,11 @@
-import { Input } from '@angular/core';
+import { EventEmitter, Input, Output } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { SalaService } from 'src/app/Services/sala.service';
 import { ALUMNO } from '../interface/alumnoInterface';
 import { AlumnosControlService } from 'src/app/Services/alumnos-control.service';
+import { SALA } from '../interface/salaInterface';
 
 @Component({
   selector: 'app-alumno',
@@ -15,7 +16,8 @@ import { AlumnosControlService } from 'src/app/Services/alumnos-control.service'
 })
 export class AlumnoComponent  implements OnInit {
 
-  @Input() salaID?:number;
+  @Input() salaID?:string;
+  @Output() newEven = new EventEmitter<SALA[]>();
 
   nombreAlumno:string = "";
 
@@ -24,16 +26,13 @@ export class AlumnoComponent  implements OnInit {
 
   ngOnInit() {}
 
-
   agregarAlumnos(event:any){
     let button:HTMLElement = event.target!;
-    let id:number = parseInt(button.id);
+    let id:string = button.id;
     let alumno:ALUMNO = this.alumnoControl.crearAlumno(this.nombreAlumno, id);
     
-
-    this.salaDB.addAlumno(id, alumno);
-
-    this.alumnoControl.incrementId()
+    const newSalas = this.salaDB.addAlumno(id, alumno);
+    this.newEven.emit(newSalas);
     this.nombreAlumno = "";
   }
 
