@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { userInterface } from './login.interface';
-import { StorageService } from '../Services/storage.service';
 import { AuthenticateService } from '../Services/authenticate.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -18,23 +18,44 @@ export class LoginPage implements OnInit {
   user: userInterface | null = null;
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private storage: StorageService, private authService: AuthenticateService) {}
+  constructor(private router: Router, private authService: AuthenticateService, private alertCtrl: AlertController) {}
 
   ngOnInit() {}
 
-  navigateToAbout() {
-    this.router.navigate(['/home']);
+  async presentAlert(message: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Login',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
-  userLogin(event: MouseEvent) {
+  async userLogin(event: MouseEvent) {
     event.preventDefault();
     this.errorMessage = null;
-
+  
     const { userName, password } = this.userForm;
-    if (this.authService.login(userName, password)) {
+  
+    if (this.authService.ingresar(userName, password)) {
+      // Almacena el estado de inicio de sesión y el nombre del usuario
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('loggedUser', userName); // Guarda el nombre del usuario logueado
+      
+      console.log('Usuario logueado: ', userName);  // Agregamos este log para verificar
+      
+      await this.presentAlert('Login exitoso');
       this.navigateToAbout();
     } else {
-      this.errorMessage = 'Credenciales inválidas';
+      await this.presentAlert('Credenciales inválidas');
     }
+  }
+  
+  
+  
+  
+  navigateToAbout() {
+    this.router.navigate(['/home']);
   }
 }

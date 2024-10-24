@@ -4,11 +4,19 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Home</ion-title>
-    <ion-button slot="end" [routerLink]="['/login']">login</ion-button> 
+    <ion-button slot="end" [routerLink]="['/login']">{{ loggedUserName }}</ion-button> 
+    <ion-button (click)="logout()"> cerrar sesion</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <ion-content>
+    <h2>Hola, {{ loggedUserName }}! Te has logueado correctamente.</h2>
+  </ion-content>
+
+
+
   <h1 style="text-align: center; margin-top: 100px;">Bienvenido a registro de asistencia RegistraAPP</h1>
   <div id="container" style="text-align: center;">
     <ion-button shape="round" expand="block" [routerLink]="['/login']" style="margin-top: 20px;">

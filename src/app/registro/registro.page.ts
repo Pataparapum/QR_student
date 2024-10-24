@@ -14,6 +14,7 @@ export class RegistroPage implements OnInit {
     password: '',
     confirmPassword: ''
   };
+
   errorMessage: string | null = null;
 
   constructor(private registroService: RegistroService, private router: Router) {}
@@ -24,6 +25,7 @@ export class RegistroPage implements OnInit {
     event.preventDefault();
     this.errorMessage = null;
 
+    // Validaciones (puedes ajustar según sea necesario)
     if (this.registerForm.password !== this.registerForm.confirmPassword) {
       this.errorMessage = 'Las contraseñas no coinciden';
       return;
@@ -37,7 +39,7 @@ export class RegistroPage implements OnInit {
 
     if (success) {
       console.log('Registro exitoso');
-      this.logUsers(); //imprimir usuarios registrados
+      this.logUsers(); // Llama al método para imprimir usuarios registrados
       this.router.navigate(['/login']); // Redirigir al login
     } else {
       this.errorMessage = 'El usuario ya está registrado';
