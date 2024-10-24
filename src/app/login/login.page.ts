@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { userInterface } from './login.interface';
 import { StorageService } from '../Services/storage.service';
 import { AuthenticateService } from '../Services/authenticate.service';
+import { HttpUserService } from '../Services/http-user.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginPage implements OnInit {
   user: userInterface | null = null;
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private storage: StorageService, private authService: AuthenticateService) {}
+  constructor(private router: Router, private storage: StorageService, private authService: AuthenticateService, private api:HttpUserService) {}
 
   ngOnInit() {}
 
@@ -27,6 +28,7 @@ export class LoginPage implements OnInit {
   }
 
   userLogin(event: MouseEvent) {
+    
     event.preventDefault();
     this.errorMessage = null;
 

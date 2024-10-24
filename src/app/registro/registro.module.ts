@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { RegistroPageRoutingModule } from './registro-routing.module';
 
 import { RegistroPage } from './registro.page';
+import { StorageService } from '../Services/storage.service';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { RegistroPage } from './registro.page';
     IonicModule,
     RegistroPageRoutingModule
   ],
-  declarations: [RegistroPage]
+  declarations: [RegistroPage],
+  providers: [StorageService]
 })
 export class RegistroPageModule {}
