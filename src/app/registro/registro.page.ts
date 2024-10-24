@@ -14,38 +14,58 @@ export class RegistroPage implements OnInit {
     password: '',
     confirmPassword: ''
   };
+
   errorMessage: string | null = null;
 
   constructor(private registroService: RegistroService, private router: Router) {}
 
   ngOnInit() {}
 
+  validateEmail(email: string): boolean {
+    
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
   register(event: MouseEvent) {
     event.preventDefault();
     this.errorMessage = null;
 
-    if (this.registerForm.password !== this.registerForm.confirmPassword) {
+    const { fullName, email, password, confirmPassword } = this.registerForm;
+
+   
+    if (!fullName) {
+      this.errorMessage = 'El nombre completo es requerido';
+      return;
+    }
+
+    if (!email || !this.validateEmail(email)) {
+      this.errorMessage = 'Por favor, introduce un correo electrónico válido';
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres';
+      return;
+    }
+
+    if (password !== confirmPassword) {
       this.errorMessage = 'Las contraseñas no coinciden';
       return;
     }
 
-    const success = this.registroService.register(
-      this.registerForm.fullName,
-      this.registerForm.email,
-      this.registerForm.password
-    );
+    const success = this.registroService.register(fullName, email, password);
 
     if (success) {
       console.log('Registro exitoso');
-      this.logUsers(); //imprimir usuarios registrados
-      this.router.navigate(['/login']); // Redirigir al login
+      this.logUsers(); 
+      this.router.navigate(['/login']); 
     } else {
       this.errorMessage = 'El usuario ya está registrado';
     }
   }
 
   logUsers() {
-    // Imprimir usuarios en la consola
     console.log(JSON.parse(localStorage.getItem('users') || '[]'));
   }
 }

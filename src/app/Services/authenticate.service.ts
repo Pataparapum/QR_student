@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -6,11 +8,19 @@ import { Injectable } from '@angular/core';
 export class AuthenticateService {
   constructor() {}
 
-  // Método para autenticar al usuario
-  login(email: string, password: string): boolean {
+ 
+  ingresar(fullName: string, password: string): boolean {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find((u: { email: string; password: string }) => u.email === email && u.password === password);
+    const user = users.find((u: { fullName: string; password: string }) => 
+      u.fullName === fullName && u.password === password
+    );
+  
+    return !!user;
+  }
+  
 
-    return !!user; // Devuelve true si el usuario existe, false en caso contrario
+  isLoggedIn(): boolean {
+    return localStorage.getItem('isLoggedIn') === 'true';
   }
 }
+

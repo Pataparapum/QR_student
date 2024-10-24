@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { userInterface } from './login.interface';
-import { StorageService } from '../Services/storage.service';
 import { AuthenticateService } from '../Services/authenticate.service';
-import { HttpUserService } from '../Services/http-user.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -19,24 +18,60 @@ export class LoginPage implements OnInit {
   user: userInterface | null = null;
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private storage: StorageService, private authService: AuthenticateService, private api:HttpUserService) {}
+  constructor(private router: Router, private authService: AuthenticateService, private alertCtrl: AlertController) {}
 
   ngOnInit() {}
 
-  navigateToAbout() {
-    this.router.navigate(['/home']);
+  async presentAlert(message: string) {
+    const alert = await this.alertCtrl.create({
+      header: 'Login',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
-  userLogin(event: MouseEvent) {
-    
+  async userLogin(event: MouseEvent) {
     event.preventDefault();
     this.errorMessage = null;
 
     const { userName, password } = this.userForm;
-    if (this.authService.login(userName, password)) {
+
+    // Validaciones
+    if (!userName) {
+      this.errorMessage = 'El nombre de usuario es requerido';
+      await this.presentAlert(this.errorMessage);
+      return;
+    }
+
+    if (!password) {
+      this.errorMessage = 'La contraseña es requerida';
+      await this.presentAlert(this.errorMessage);
+      return;
+    }
+
+    if (password.length < 6) {
+      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres';
+      await this.presentAlert(this.errorMessage);
+      return;
+    }
+
+    if (this.authService.ingresar(userName, password)) {
+    
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('loggedUser', userName); 
+
+      console.log('Usuario logueado: ', userName);  
+
+      await this.presentAlert('Login exitoso');
       this.navigateToAbout();
     } else {
-      this.errorMessage = 'Credenciales inválidas';
+      await this.presentAlert('Credenciales inválidas');
     }
+  }
+
+  navigateToAbout() {
+    this.router.navigate(['/home']);
   }
 }
