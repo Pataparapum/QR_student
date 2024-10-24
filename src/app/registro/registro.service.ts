@@ -6,36 +6,36 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class RegistroService {
-  private storageKey = 'users'; // Clave para el almacenamiento local
+  private storageKey = 'users'; 
 
   constructor() {
-    // Inicializa el almacenamiento local si no hay usuarios
+    
     if (!localStorage.getItem(this.storageKey)) {
       localStorage.setItem(this.storageKey, JSON.stringify([]));
     }
   }
 
-  // Método para registrar un nuevo usuario
+  
   register(fullName: string, email: string, password: string): boolean {
-    const users = this.getUsers(); // Obtener usuarios actuales
+    const users = this.getUsers(); 
     const existingUser = users.find(user => user.email === email);
 
     if (existingUser) {
-      return false; // Usuario ya registrado
+      return false; 
     }
 
-    // Agregar nuevo usuario
+    
     users.push({ fullName, email, password });
-    localStorage.setItem(this.storageKey, JSON.stringify(users)); // Guardar en localStorage
-    return true; // Registro exitoso
+    localStorage.setItem(this.storageKey, JSON.stringify(users)); 
+    return true; 
   }
 
-  // Método para obtener todos los usuarios
+  
   getUsers(): { fullName: string; email: string; password: string }[] {
-    return JSON.parse(localStorage.getItem(this.storageKey) || '[]'); // Retorna la lista de usuarios
+    return JSON.parse(localStorage.getItem(this.storageKey) || '[]'); 
   }
 
-  // Método para imprimir usuarios en la consola
+  
   logUsersToConsole(): void {
     console.log('Usuarios Registrados:', this.getUsers());
   }

@@ -17,41 +17,41 @@
 
             <h5 class="ion-text-center ion-margin-bottom">Crea tu cuenta</h5>
 
-            <!-- Mostrar mensajes de error -->
+           
             <div *ngIf="errorMessage" class="ion-padding" style="color: red;">
               {{ errorMessage }}
             </div>
 
-            <!-- Campo de Nombre -->
+            
             <ion-item>
               <ion-label position="floating">Nombre</ion-label>
               <ion-input [(ngModel)]="registerForm.fullName" type="text" required></ion-input>
             </ion-item>
 
-            <!-- Campo de Correo Electrónico -->
+            
             <ion-item>
               <ion-label position="floating">Correo Electrónico</ion-label>
               <ion-input [(ngModel)]="registerForm.email" type="email" required></ion-input>
             </ion-item>
 
-            <!-- Campo de Contraseña -->
+            
             <ion-item>
               <ion-label position="floating">Contraseña</ion-label>
               <ion-input [(ngModel)]="registerForm.password" type="password" required></ion-input>
             </ion-item>
 
-            <!-- Campo de Confirmación de Contraseña -->
+            
             <ion-item>
               <ion-label position="floating">Confirmar Contraseña</ion-label>
               <ion-input [(ngModel)]="registerForm.confirmPassword" type="password" required></ion-input>
             </ion-item>
 
-            <!-- Botón de Registrarse -->
+        
             <ion-button expand="block" color="primary" class="ion-margin-top" (click)="register($event)">
               Registrarse
             </ion-button>
 
-            <!-- Botón de Volver -->
+            
             <ion-button expand="block" fill="clear" color="medium" [routerLink]="['/login']">
               Volver
             </ion-button>

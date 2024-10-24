@@ -11,7 +11,7 @@
         <ion-card>
           <ion-card-content>
             
-            <!-- Título de Login -->
+         +
             <div class="ion-text-center">
               <ion-icon name="person-outline" size="large"></ion-icon>
               <h1 class="ion-margin-top">Login</h1>
@@ -19,33 +19,33 @@
 
             <h5 class="ion-text-center ion-margin-bottom">Ingresa tus credenciales</h5>
 
-            <!-- Campo de Nombre de Usuario -->
+
             <ion-item>
               <ion-label position="floating">Nombre de Usuario</ion-label>
               <ion-input [(ngModel)]="userForm.userName" type="text" required></ion-input>
             </ion-item>
 
-            <!-- Campo de Contraseña -->
+            
             <ion-item>
               <ion-label position="floating">Contraseña</ion-label>
               <ion-input [(ngModel)]="userForm.password" type="password" required></ion-input>
             </ion-item>
 
-            <!-- Botón de Iniciar Sesión -->
+            
             <ion-button expand="block" color="primary" class="ion-margin-top" (click)="userLogin($event)">
               Iniciar Sesión
             </ion-button>
 
             <p>Aun no tienes usuario? Presiona aqui para <ion-button fill="clear" [routerLink]="['/registro']">registrarte</ion-button></p>
 
-            <!-- Mensaje de error -->
+            
             <div *ngIf="errorMessage" class="ion-margin-top">
               <ion-text color="danger">
                 <p>{{ errorMessage }}</p>
               </ion-text>
             </div>
 
-            <!-- Botón de Volver -->
+            
             <ion-button expand="block" fill="clear" color="medium" [routerLink]="['/home']">
               Volver
             </ion-button>

@@ -32,6 +32,7 @@ export class HomePage implements OnInit{
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('loggedUser');
     this.router.navigate(['/login']);
+    console.log('La sesión se ha cerrado correctamente');
   }
   
 

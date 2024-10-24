@@ -35,26 +35,42 @@ export class LoginPage implements OnInit {
   async userLogin(event: MouseEvent) {
     event.preventDefault();
     this.errorMessage = null;
-  
+
     const { userName, password } = this.userForm;
-  
+
+    // Validaciones
+    if (!userName) {
+      this.errorMessage = 'El nombre de usuario es requerido';
+      await this.presentAlert(this.errorMessage);
+      return;
+    }
+
+    if (!password) {
+      this.errorMessage = 'La contraseña es requerida';
+      await this.presentAlert(this.errorMessage);
+      return;
+    }
+
+    if (password.length < 6) {
+      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres';
+      await this.presentAlert(this.errorMessage);
+      return;
+    }
+
     if (this.authService.ingresar(userName, password)) {
-      // Almacena el estado de inicio de sesión y el nombre del usuario
+    
       localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('loggedUser', userName); // Guarda el nombre del usuario logueado
-      
-      console.log('Usuario logueado: ', userName);  // Agregamos este log para verificar
-      
+      localStorage.setItem('loggedUser', userName); 
+
+      console.log('Usuario logueado: ', userName);  
+
       await this.presentAlert('Login exitoso');
       this.navigateToAbout();
     } else {
       await this.presentAlert('Credenciales inválidas');
     }
   }
-  
-  
-  
-  
+
   navigateToAbout() {
     this.router.navigate(['/home']);
   }

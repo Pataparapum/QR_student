@@ -5,3 +5,39 @@
   align-items: center;
   height: 100%;
 }
+
+.header-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.welcome-section {
+  text-align: center;
+  margin-top: 20px;
+}
+.welcome-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.main-title {
+  text-align: center;
+  margin-top: 100px;
+  font-size: 2rem;
+  font-weight: bold;
+}
+.subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: var(--ion-text-color, #000); /* Mantén los colores por defecto */
+}
+.button-container {
+  text-align: center;
+  margin-top: 30px;
+}
+.styled-button {
+  --border-radius: 12px;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
+}
+.forgot-password {
+  margin-top: 10px;
+}
