@@ -9,14 +9,15 @@ export class AuthenticateService {
   constructor() {}
 
  
-  ingresar(userName: string, password: string): boolean {
+  ingresar(fullName: string, password: string): boolean {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find((u: { userName: string; password: string }) => 
-      u.userName === userName && u.password === password
+    const user = users.find((u: { fullName: string; password: string }) => 
+      u.fullName === fullName && u.password === password
     );
-
+  
     return !!user;
   }
+  
 
   isLoggedIn(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';

@@ -33,7 +33,7 @@ export class RegistroPage implements OnInit {
 
     const { fullName, email, password, confirmPassword } = this.registerForm;
 
-    // Validaciones
+   
     if (!fullName) {
       this.errorMessage = 'El nombre completo es requerido';
       return;
@@ -66,7 +66,6 @@ export class RegistroPage implements OnInit {
   }
 
   logUsers() {
-    // Imprimir usuarios en la consola
     console.log(JSON.parse(localStorage.getItem('users') || '[]'));
   }
 }

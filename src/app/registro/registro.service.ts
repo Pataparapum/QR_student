@@ -17,18 +17,19 @@ export class RegistroService {
 
   
   register(fullName: string, email: string, password: string): boolean {
-    const users = this.getUsers(); 
-    const existingUser = users.find(user => user.email === email);
-
+    const users = this.getUsers();
+    const existingUser = users.find(user => user.fullName === fullName);
+  
     if (existingUser) {
       return false; 
     }
+  
 
-    
     users.push({ fullName, email, password });
-    localStorage.setItem(this.storageKey, JSON.stringify(users)); 
+    localStorage.setItem(this.storageKey, JSON.stringify(users));
     return true; 
   }
+  
 
   
   getUsers(): { fullName: string; email: string; password: string }[] {
