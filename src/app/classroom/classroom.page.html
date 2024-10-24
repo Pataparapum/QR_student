@@ -4,11 +4,14 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>classroom</ion-title>
-    <ion-button slot="end" [routerLink]="['/login']">login </ion-button> 
+    <ion-button slot="end" (click)="logout()" fill="clear">
+      <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">classroom</ion-title>

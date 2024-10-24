@@ -15,8 +15,15 @@ export class HttpUserService {
       "password":password,
       "email":email
     });
-
-    console.log(user);
-    
   }
+
+  async login(username:string, email:string) {
+    let user = await this.api.post(`https://registr-api.fly.dev/user/login`, {
+      grupoId: 4,
+      username:username,
+      email:email
+    });
+  }
+
+  
 }

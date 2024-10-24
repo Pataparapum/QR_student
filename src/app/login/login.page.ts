@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { userInterface } from './login.interface';
 import { AuthenticateService } from '../Services/authenticate.service';
 import { AlertController } from '@ionic/angular';
+import { HttpUserService } from '../Services/http-user.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginPage implements OnInit {
   user: userInterface | null = null;
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private authService: AuthenticateService, private alertCtrl: AlertController) {}
+  constructor(private router: Router, private authService: AuthenticateService, private alertCtrl: AlertController, private api:HttpUserService) {}
 
   ngOnInit() {}
 
@@ -61,10 +62,16 @@ export class LoginPage implements OnInit {
     
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('loggedUser', userName); 
+      console.log(this.api.login(userName, password));
+
 
       console.log('Usuario logueado: ', userName);  
 
       await this.presentAlert('Login exitoso');
+      
+      this.userForm.password = "";
+      this.userForm.userName = "";
+
       this.navigateToAbout();
     } else {
       await this.presentAlert('Credenciales inválidas');

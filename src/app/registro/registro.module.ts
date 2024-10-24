@@ -14,8 +14,8 @@ import { StorageService } from '../Services/storage.service';
     CommonModule,
     FormsModule,
     IonicModule,
-    RegistroPageRoutingModule
-  ],
+    RegistroPageRoutingModule,
+],
   declarations: [RegistroPage],
   providers: [StorageService]
 })

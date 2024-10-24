@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HttpUserService } from '../Services/http-user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 export class RegistroService {
   private storageKey = 'users'; 
 
-  constructor() {
+  constructor(private api:HttpUserService) {
     
     if (!localStorage.getItem(this.storageKey)) {
       localStorage.setItem(this.storageKey, JSON.stringify([]));
@@ -17,8 +18,10 @@ export class RegistroService {
 
   
   register(fullName: string, email: string, password: string): boolean {
+  
     const users = this.getUsers();
     const existingUser = users.find(user => user.fullName === fullName);
+    this.api.registerUser(fullName, email, password);
   
     if (existingUser) {
       return false; 

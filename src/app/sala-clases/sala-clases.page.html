@@ -1,6 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>SalaClases</ion-title>
+    <ion-title>Sala Clases</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-button slot="end" (click)="logout()" fill="clear">
+      <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 

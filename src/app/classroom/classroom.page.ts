@@ -13,6 +13,13 @@ export class ClassroomPage implements OnInit {
     this.router.navigate(['/home']);
   }
 
+  logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('loggedUser');
+    this.router.navigate(['/login']);
+    console.log('La sesión se ha cerrado correctamente');
+  }
+
   ngOnInit() {
   }
 

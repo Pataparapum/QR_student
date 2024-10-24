@@ -2,7 +2,7 @@ import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } fr
 import { SALA } from './interface/salaInterface';
 import { SalaService } from '../Services/sala.service';
 import { MatCard } from '@angular/material/card';
-import { Event } from '@angular/router';
+import { Event, Router } from '@angular/router';
 import { ALUMNO } from './interface/alumnoInterface';
 import { AlumnosControlService } from '../Services/alumnos-control.service';
 
@@ -25,7 +25,7 @@ export class SalaClasesPage implements OnInit, OnChanges {
   nombreAlumno: string = "";
 
 
-  constructor(private salaDB:SalaService, private alumnoControl:AlumnosControlService) {}
+  constructor(private salaDB:SalaService, private alumnoControl:AlumnosControlService, private router:Router) {}
 
   async ngOnInit() {
     this.salaArray = await this.salaDB.get();
@@ -57,6 +57,13 @@ export class SalaClasesPage implements OnInit, OnChanges {
       alumno.asistencia = true;
     }
     
+  }
+
+  logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('loggedUser');
+    this.router.navigate(['/login']);
+    console.log('La sesión se ha cerrado correctamente');
   }
 
 }

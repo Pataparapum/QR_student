@@ -1,12 +1,12 @@
-import { SalaClasesPage } from './sala-clases/sala-clases.page';
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { LoginGuardService } from './Guards/login-guard.service';
 
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule),
+    canActivate: [LoginGuardService]
   },
   {
     path: '',
@@ -19,7 +19,8 @@ const routes: Routes = [
   },
   {
     path: 'classroom',
-    loadChildren: () => import('./classroom/classroom.module').then( m => m.ClassroomPageModule)
+    loadChildren: () => import('./classroom/classroom.module').then( m => m.ClassroomPageModule),
+    canActivate: [LoginGuardService]
   },
   {
     path: 'registro',
@@ -27,7 +28,8 @@ const routes: Routes = [
   },
   {
     path: 'salas',
-    loadChildren: () =>import('./sala-clases/sala-clases.module').then( m => m.SalaClasesPageModule)
+    loadChildren: () => import('./sala-clases/sala-clases.module').then( m => m.SalaClasesPageModule),
+    canActivate: [LoginGuardService]
   }
 
 ];

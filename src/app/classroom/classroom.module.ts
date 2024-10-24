@@ -13,8 +13,8 @@ import { ClassroomPage } from './classroom.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ClassroomPageRoutingModule
-  ],
+    ClassroomPageRoutingModule,
+],
   declarations: [ClassroomPage]
 })
 export class ClassroomPageModule {}

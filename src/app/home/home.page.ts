@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit{
 
+  usuario = localStorage.getItem('loggedUser');
+
   constructor(private router:Router) {}
 
   loggedUserName: string | null = null;

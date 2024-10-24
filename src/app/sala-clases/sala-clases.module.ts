@@ -17,8 +17,8 @@ import { AlumnoComponent } from './alumno/alumno.component';
     IonicModule,
     SalaClasesPageRoutingModule,
     MatCardModule,
-    AlumnoComponent
-  ],
+    AlumnoComponent,
+],
   declarations: [SalaClasesPage]
 })
 export class SalaClasesPageModule {}

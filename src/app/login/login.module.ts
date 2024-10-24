@@ -15,8 +15,8 @@ import { HttpUserService } from '../Services/http-user.service';
     CommonModule,
     FormsModule,
     IonicModule,
-    LoginPageRoutingModule
-  ],
+    LoginPageRoutingModule,
+],
   declarations: [LoginPage],
   providers: [HttpUserService]
 })

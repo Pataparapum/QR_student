@@ -59,6 +59,12 @@ export class RegistroPage implements OnInit {
     if (success) {
       console.log('Registro exitoso');
       this.logUsers(); 
+
+      this.registerForm.confirmPassword = "";
+      this.registerForm.email = "";
+      this.registerForm.fullName = "";
+      this.registerForm.password = "";
+
       this.router.navigate(['/login']); 
     } else {
       this.errorMessage = 'El usuario ya está registrado';
