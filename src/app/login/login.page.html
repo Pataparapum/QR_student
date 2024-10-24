@@ -11,7 +11,7 @@
         <ion-card>
           <ion-card-content>
             
-         +
+         
             <div class="ion-text-center">
               <ion-icon name="person-outline" size="large"></ion-icon>
               <h1 class="ion-margin-top">Login</h1>
@@ -36,7 +36,12 @@
               Iniciar Sesión
             </ion-button>
 
-            <p>Aun no tienes usuario? Presiona aqui para <ion-button fill="clear" [routerLink]="['/registro']">registrarte</ion-button></p>
+            <p>¿Aún no tienes cuenta?</p>
+            <ion-button fill="clear" color="primary" [routerLink]="['/registro']">
+              <ion-icon name="person-add-outline"></ion-icon>
+              Registrarse
+            </ion-button>
+
 
             
             <div *ngIf="errorMessage" class="ion-margin-top">
