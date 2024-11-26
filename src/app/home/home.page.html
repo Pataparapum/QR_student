@@ -1,26 +1,31 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <!-- Menú en la izquierda -->
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
+
+    <!-- Título centrado -->
     <ion-title class="header-title">Inicio</ion-title>
-    <ion-button slot="end" fill="clear">{{ loggedUserName }}</ion-button>
-    <ion-button slot="end" (click)="logout()" fill="clear">
-      <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
-    </ion-button>
-    
+
+    <!-- Nombre del usuario y botón de cerrar sesión -->
+    <ion-buttons slot="end">
+      <ion-label class="user-name">{{ loggedUserName }}</ion-label>
+      <ion-button fill="clear" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="home-content">
+  <!-- Sección de Bienvenida -->
   <div class="welcome-section">
-    <h2 class="welcome-text">¡Hola, {{ loggedUserName }}! Te has logueado correctamente.</h2>
+    <h2 class="welcome-text">¡Hola, {{ loggedUserName }}!</h2>
+    <p>Te has logueado correctamente.</p>
   </div>
-  
+
+  <!-- Título principal -->
   <h1 class="main-title">Bienvenido a RegistraAPP</h1>
   <p class="subtitle">Tu plataforma de registro de asistencia</p>
-
-  
-  
 </ion-content>
-

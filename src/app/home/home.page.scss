@@ -1,43 +1,82 @@
-#container {
-  display: flex;
-  flex-direction: column;
-  margin-top: auto;
-  align-items: center;
-  height: 100%;
+/* Header */
+.header-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--ion-color-dark); /* Texto oscuro */
 }
 
-.header-title {
+.user-name {
+  font-size: 1rem;
+  color: var(--ion-color-primary); /* Azul corporativo */
   font-weight: bold;
-  font-size: 1.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es largo */
+  max-width: 100px; /* Limitar ancho */
 }
-.welcome-section {
+
+ion-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+ion-buttons {
+  display: flex;
+  gap: 8px; /* Espaciado entre botones */
+}
+
+/* Responsividad del Header */
+@media (max-width: 768px) {
+  .header-title {
+    font-size: 1.2rem;
+  }
+
+  .user-name {
+    font-size: 0.9rem;
+    max-width: 80px; /* Reducir ancho máximo */
+  }
+
+  ion-buttons {
+    gap: 4px; /* Menos espacio entre botones */
+  }
+}
+
+/* Contenido Principal */
+.home-content {
+  --padding-top: 20px;
+  --padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+}
+
+/* Sección de Bienvenida */
+.welcome-section {
   margin-top: 20px;
 }
+
 .welcome-text {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--ion-color-dark);
 }
+
+.welcome-section p {
+  font-size: 1.1rem;
+  color: var(--ion-color-medium);
+}
+
+/* Título Principal */
 .main-title {
-  text-align: center;
-  margin-top: 100px;
   font-size: 2rem;
   font-weight: bold;
+  margin-top: 50px;
 }
+
 .subtitle {
-  text-align: center;
   font-size: 1.2rem;
-  margin-bottom: 40px;
-  color: var(--ion-text-color, #000); /* Mantén los colores por defecto */
-}
-.button-container {
-  text-align: center;
-  margin-top: 30px;
-}
-.styled-button {
-  --border-radius: 12px;
-  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera para dar profundidad */
-}
-.forgot-password {
-  margin-top: 10px;
+  color: var(--ion-text-color, #666);
+  margin-bottom: 20px;
 }
