@@ -1,4 +1,29 @@
 .cardSala, .salaNameInput {
     margin: 10px;
 }
-
+  
+  .empty-state {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .empty-icon {
+    font-size: 48px;
+    color: gray;
+    margin-bottom: 16px;
+  }
+  
+  .card-sala {
+    margin: 16px;
+  }
+  
+  mat-card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  ion-button {
+    margin-left: 8px;
+  }
+  

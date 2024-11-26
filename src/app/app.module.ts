@@ -10,6 +10,7 @@ import { StorageService } from './Services/storage.service';
 import { AuthenticateService } from './Services/authenticate.service';
 import { IonicStorageModule, Storage } from '@ionic/storage-angular';
 import { HttpClientModule } from '@angular/common/http';
+import { AlertController } from '@ionic/angular';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     StorageService,
     AuthenticateService,
-    Storage
+    Storage,
+    AlertController
   ],
   bootstrap: [AppComponent],
 })

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SALA } from './interface/salaInterface';
 import { SalaService } from '../Services/sala.service';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-sala-clases',
@@ -16,7 +17,11 @@ export class SalaClasesPage implements OnInit {
     alumnos: []
   };
 
-  constructor(private salaDB: SalaService, private router: Router) {}
+  constructor(
+    private salaDB: SalaService,
+    private router: Router,
+    private alertController: AlertController
+  ) {}
 
   async ngOnInit() {
     // Cargar las salas existentes
@@ -43,6 +48,37 @@ export class SalaClasesPage implements OnInit {
     await this.salaDB.push(nuevaSala);
     this.salaArray = await this.salaDB.get();
     this.sala.nombre = '';
+  }
+
+  async confirmarEliminarSala(salaID: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar eliminación',
+      message: '¿Estás seguro de que deseas eliminar esta sala? Esta acción no se puede deshacer.',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Eliminación cancelada');
+          }
+        },
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.eliminarSala(salaID);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async eliminarSala(salaID: string) {
+    console.log(`Eliminando sala con ID: ${salaID}`);
+    await this.salaDB.delete(salaID);
+    this.salaArray = await this.salaDB.get();
   }
 
   logout() {

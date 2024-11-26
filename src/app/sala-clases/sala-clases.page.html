@@ -26,23 +26,21 @@
 
   <!-- Lista de salas -->
   <div *ngIf="salaArray.length > 0">
-    <mat-card *ngFor="let s of salaArray" class="card-sala">
-      <mat-card-header>
-        <mat-card-title>
-          Sala: {{ s.nombre }}
-        </mat-card-title>
-        <ion-button
-          fill="clear"
-          color="primary"
-          slot="end"
-          [routerLink]="['/listado-alumnos', s.id]">
-          <ion-icon name="list-outline"></ion-icon>
-          Ver Alumnos
-        </ion-button>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Alumnos registrados: {{ s.alumnos?.length || 0 }}</p>
-      </mat-card-content>
-    </mat-card>
+    <ion-list>
+      <ion-item *ngFor="let s of salaArray">
+        <ion-label>
+          <h2>{{ s.nombre }}</h2>
+          <p>Alumnos registrados: {{ s.alumnos?.length || 0 }}</p>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="primary" [routerLink]="['/listado-alumnos', s.id]">
+            <ion-icon name="list-outline"></ion-icon> Ver Alumnos
+          </ion-button>
+          <ion-button color="danger" (click)="confirmarEliminarSala(s.id)">
+            <ion-icon name="trash-outline"></ion-icon> Eliminar
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>
