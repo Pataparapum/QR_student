@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RegistroService } from '../registro/registro.service';
 
 @Component({
   selector: 'app-perfil',
@@ -8,30 +7,24 @@ import { RegistroService } from '../registro/registro.service';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-  user = {
-    fullName: '',
-    email: ''
-  };
+  userData: { fullName: string; email: string; role: string } | null = null;
 
-  constructor(private registroService: RegistroService, private router: Router) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
-    this.loadUserProfile();
+    this.loadUserData();
   }
 
-  loadUserProfile() {
-    const users = this.registroService.getUsers();
+  loadUserData() {
+    // Recupera los usuarios registrados
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
     const loggedUser = localStorage.getItem('loggedUser');
 
-    if (loggedUser) {
-      const user = users.find(u => u.fullName === loggedUser);
-      if (user) {
-        this.user = user;
-      } else {
-        console.error('Usuario no encontrado');
-      }
-    } else {
-      console.error('No hay usuario logueado');
+    // Encuentra el usuario logueado en el localStorage
+    this.userData = users.find((user: { fullName: string }) => user.fullName === loggedUser) || null;
+
+    if (!this.userData) {
+      console.error('Usuario no encontrado');
     }
   }
 

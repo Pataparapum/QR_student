@@ -17,26 +17,24 @@ export class RegistroService {
   }
 
   
-  register(fullName: string, email: string, password: string): boolean {
-  
+  register(fullName: string, email: string, password: string, role: string): boolean {
     const users = this.getUsers();
     const existingUser = users.find(user => user.fullName === fullName);
-    this.api.registerUser(fullName, email, password);
   
     if (existingUser) {
       return false; 
     }
   
-
-    users.push({ fullName, email, password });
+    users.push({ fullName, email, password, role }); // Se agrega el rol
     localStorage.setItem(this.storageKey, JSON.stringify(users));
     return true; 
   }
   
+  
 
   
-  getUsers(): { fullName: string; email: string; password: string }[] {
-    return JSON.parse(localStorage.getItem(this.storageKey) || '[]'); 
+  getUsers(): { fullName: string; email: string; password: string; role: string }[] {
+    return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
   }
 
   

@@ -1,38 +1,32 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <!-- Botón de retroceso -->
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
-
-    <!-- Título centrado -->
-    <ion-title class="header-title">Perfil</ion-title>
+    <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="profile-content">
-  <!-- Información del usuario -->
-  <ion-card class="info-card">
-    <ion-card-header>
-      <ion-card-title>Información Personal</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item lines="none">
-        <ion-label>Nombre Completo</ion-label>
-        <ion-text>{{ user.fullName }}</ion-text>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-label>Correo Electrónico</ion-label>
-        <ion-text>{{ user.email }}</ion-text>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Botón para cerrar sesión -->
-  <div class="logout-section">
-    <ion-button expand="block" color="danger" (click)="logout()">
-      <ion-icon slot="start" name="log-out-outline"></ion-icon>
-      Cerrar Sesión
-    </ion-button>
+<ion-content class="perfil-content">
+  <div class="perfil-container">
+    <ion-card class="perfil-card">
+      <ion-card-header>
+        <ion-card-title class="perfil-title">
+          <ion-icon name="person-circle-outline" class="perfil-icon"></ion-icon>
+          Mi Perfil
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="perfil-info">
+          <p><strong>Nombre:</strong> {{ userData?.fullName }}</p>
+          <p><strong>Email:</strong> {{ userData?.email }}</p>
+          <p><strong>Rol:</strong> {{ userData?.role }}</p>
+        </div>
+        <ion-button expand="block" color="danger" (click)="logout()">
+          <ion-icon name="log-out-outline" slot="start"></ion-icon>
+          Cerrar Sesión
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

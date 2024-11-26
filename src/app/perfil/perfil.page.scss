@@ -1,95 +1,50 @@
-/* Header */
-.header-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--ion-color-dark);
-  }
-  
-  ion-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  ion-buttons {
-    display: flex;
-    gap: 8px; /* Espaciado entre botones */
-  }
-  
-  ion-back-button {
-    --color: var(--ion-color-primary); /* Azul corporativo */
-    font-size: 1.2rem;
-  }
-  
-  /* Contenido Principal */
-  .profile-content {
-    --padding: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  /* Sección de Bienvenida */
-  .welcome-section {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .user-avatar {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
-  }
-  
-  .avatar-icon {
-    font-size: 100px;
-    color: var(--ion-color-primary);
-  }
-  
-  .user-name {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--ion-color-dark);
-  }
-  
-  .user-email {
-    font-size: 1.2rem;
-    color: var(--ion-color-medium);
-  }
-  
-  /* Tarjeta de Información */
-  .info-card {
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 12px;
-  }
-  
-  .info-card ion-card-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    text-align: center;
-    color: var(--ion-color-primary);
-  }
-  
-  .info-card ion-item {
-    font-size: 1rem;
-    --color: var(--ion-color-dark);
-  }
-  
-  .info-card ion-text {
-    font-weight: 600;
-  }
-  
-  /* Botón de Cerrar Sesión */
-  .logout-section {
-    margin-top: 20px;
-    width: 100%;
-  }
-  
-  .logout-section ion-button {
-    --background: var(--ion-color-danger);
-    --color: white;
-    border-radius: 8px;
-  }
-  
+/* Contenedor Principal */
+.perfil-content {
+  --padding-top: 20px;
+  --padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.perfil-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px;
+}
+
+/* Tarjeta del Perfil */
+.perfil-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--ion-color-primary);
+}
+
+.perfil-icon {
+  font-size: 2rem;
+  margin-right: 8px;
+}
+
+/* Información del Usuario */
+.perfil-info {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ion-color-dark);
+  margin-bottom: 16px;
+}
+
+/* Botón Cerrar Sesión */
+ion-button {
+  --background: var(--ion-color-danger);
+  --color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
