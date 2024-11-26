@@ -1,0 +1,3 @@
+Instalacion en consola: npm install qrcode
+
+instalacion en consola para : npm install --save-dev @types/qrcode

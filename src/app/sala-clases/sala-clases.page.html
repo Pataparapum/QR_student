@@ -5,7 +5,10 @@
     </ion-buttons>
     <ion-title class="header-title">Clases</ion-title>
     <ion-buttons slot="end" class="header-actions">
-      <ion-label class="user-name">{{ loggedUserName }}</ion-label>
+      <!-- Botón con el nombre del usuario que dirige a la página de perfil -->
+      <ion-button [routerLink]="['/perfil']" fill="clear">
+        <ion-label>{{ loggedUserName }}</ion-label>
+      </ion-button>
       <ion-button (click)="logout()" fill="clear">
         <ion-icon name="log-out-outline"></ion-icon>
       </ion-button>

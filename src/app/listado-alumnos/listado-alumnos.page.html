@@ -29,4 +29,21 @@
       </ion-checkbox>
     </ion-item>
   </ion-list>
+
+  <!-- Botón para generar el QR -->
+  <ion-button expand="block" color="secondary" (click)="generarQRCode()">
+    Generar Código QR
+  </ion-button>
+
+  <!-- Mostrar el QR generado -->
+  <div *ngIf="qrCodeUrl" class="qr-container">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Código QR</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <img [src]="qrCodeUrl" alt="Código QR de la sala" />
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
