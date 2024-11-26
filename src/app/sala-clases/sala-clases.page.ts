@@ -11,13 +11,10 @@ import { AlertController } from '@ionic/angular';
 })
 export class SalaClasesPage implements OnInit {
   usuario = localStorage.getItem('loggedUser');
-
   salaArray: SALA[] = [];
-  sala: SALA = {
-    nombre: '',
-    id: '',
-    alumnos: []
-  };
+  sala: SALA = { nombre: '', id: '', alumnos: [] };
+  loggedUserName: string | null = null;
+  userRole: string | null = null;
 
   constructor(
     private salaDB: SalaService,
@@ -25,21 +22,39 @@ export class SalaClasesPage implements OnInit {
     private alertController: AlertController
   ) {}
 
-  loggedUserName: string | null = null;
-
   async ngOnInit() {
-    // Cargar las salas existentes
-    this.salaArray = await this.salaDB.get();
     this.getLoggedUserName();
+    this.getUserRole();
+    this.loadSalas();
   }
 
+  async loadSalas() {
+    const allSalas = await this.salaDB.get();
+  
+    if (this.userRole === 'Alumno') {
+      // Filtrar salas donde el usuario logueado esté registrado como alumno
+      this.salaArray = allSalas.filter((s) =>
+        (s.alumnos || []).some((alumno) => alumno.nombre === this.loggedUserName)
+      );
+    } else {
+      // Si es profesor, mostrar todas las salas
+      this.salaArray = allSalas;
+    }
+  }
+  
+
   async crearSala() {
+    if (this.userRole !== 'Profesor') {
+      console.error('Solo los profesores pueden crear salas.');
+      return;
+    }
+
     if (!this.sala.nombre.trim()) {
       console.error('El nombre de la sala es obligatorio');
       return;
     }
 
-    if (this.salaArray.some(s => s.nombre === this.sala.nombre.trim())) {
+    if (this.salaArray.some((s) => s.nombre === this.sala.nombre.trim())) {
       console.error('El nombre de la sala ya existe');
       return;
     }
@@ -47,7 +62,7 @@ export class SalaClasesPage implements OnInit {
     const nuevaSala: SALA = {
       nombre: this.sala.nombre.trim(),
       id: (Math.random() * 100000).toFixed(0),
-      alumnos: []
+      alumnos: [], // Inicializado correctamente
     };
 
     await this.salaDB.push(nuevaSala);
@@ -56,6 +71,11 @@ export class SalaClasesPage implements OnInit {
   }
 
   async confirmarEliminarSala(salaID: string) {
+    if (this.userRole !== 'Profesor') {
+      console.error('Solo los profesores pueden eliminar salas.');
+      return;
+    }
+
     const alert = await this.alertController.create({
       header: 'Confirmar eliminación',
       message: '¿Estás seguro de que deseas eliminar esta sala? Esta acción no se puede deshacer.',
@@ -66,15 +86,15 @@ export class SalaClasesPage implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             console.log('Eliminación cancelada');
-          }
+          },
         },
         {
           text: 'Eliminar',
           handler: () => {
             this.eliminarSala(salaID);
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
@@ -86,17 +106,24 @@ export class SalaClasesPage implements OnInit {
     this.salaArray = await this.salaDB.get();
   }
 
+  getLoggedUserName() {
+    const storedUserName = localStorage.getItem('loggedUser');
+    this.loggedUserName = storedUserName;
+  }
+
+  getUserRole() {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const loggedUser = this.loggedUserName;
+    const user = users.find((u: { fullName: string }) => u.fullName === loggedUser);
+
+    this.userRole = user ? user.role : null;
+    console.log('Rol del usuario:', this.userRole);
+  }
+
   logout() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('loggedUser');
     this.router.navigate(['/login']);
     console.log('Sesión cerrada');
-  }
-
-  getLoggedUserName() {
-    // Recupera el nombre del usuario desde localStorage
-    const storedUserName = localStorage.getItem('loggedUser');
-    console.log('Nombre de usuario recuperado: ', storedUserName);  // Agregamos este log para depurar
-    this.loggedUserName = storedUserName;
   }
 }
