@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ salaNombre }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="alumno-input">
+    <ion-label class="label-header" position="stacked">Nombre del Alumno</ion-label>
+    <ion-input [(ngModel)]="nombreAlumno" placeholder="Escribe el nombre del alumno"></ion-input>
+    <ion-button expand="block" color="primary" (click)="agregarAlumno()">Agregar Alumno</ion-button>
+  </div>
+
+  <div *ngIf="alumnos.length === 0" class="empty-state">
+    <ion-icon name="people-outline" class="empty-icon"></ion-icon>
+    <p>No hay alumnos registrados aún.</p>
+  </div>
+
+  <ion-list *ngIf="alumnos.length > 0">
+    <ion-item *ngFor="let alumno of alumnos">
+      <ion-label>{{ alumno.nombre }}</ion-label>
+      <ion-checkbox
+        slot="end"
+        [(ngModel)]="alumno.asistencia"
+        (ionChange)="marcarAsistencia(alumno.id)">
+      </ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-content>

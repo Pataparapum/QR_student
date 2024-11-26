@@ -11,37 +11,38 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
+  <!-- Formulario para crear sala -->
   <div class="salaNameInput">
-    <ion-label position="floating" >Ingresa el nombre de la sala de clases</ion-label>
-    <ion-input [(ngModel)] ="sala.nombre">Crear Sala</ion-input>
-
-
-    <ion-button (click)="crearSala()">Crear sala</ion-button>
+    <ion-label class="label-header" position="stacked">Nombre de la Sala</ion-label>
+    <ion-input [(ngModel)]="sala.nombre" placeholder="Escribe el nombre de la sala"></ion-input>
+    <ion-button expand="block" color="primary" (click)="crearSala()">Crear Sala</ion-button>
   </div>
-  
-  @if (salaArray.length > 0) {
-    @for (s of salaArray; let i = $index; track i) {
-      <mat-card class="cardSala" id="{{s.id}}" card>
-        <mat-card-header>
-          <mat-card-title>Sala: {{s.nombre}} index: = {{i}}</mat-card-title>
-        </mat-card-header>  
-        <mat-card-content>
-          <app-alumno [salaID]="s.id" (newEven)="setSala($event)"></app-alumno>  
-          @if (s.alumnos) {
-            @for (alumno of s.alumnos; let i = $index; track i) {
-              <ion-list>
-                <ion-item>
-                  <ion-label>{{alumno.nombre}}      index = {{i}}</ion-label>
-                  <ion-checkbox slot="end" (ionChange)="marcarAsistencia(alumno.id, alumno.idSala)" [checked]="alumno.asistencia"></ion-checkbox>
-                </ion-item>
-            </ion-list>   
-            } 
-          }
-          
-        </mat-card-content>
-      </mat-card>
-    }
-  } 
 
+  <!-- Mensaje si no hay salas -->
+  <div *ngIf="salaArray.length === 0" class="empty-state">
+    <ion-icon name="cube-outline" class="empty-icon"></ion-icon>
+    <p>No hay salas creadas aún.</p>
+  </div>
+
+  <!-- Lista de salas -->
+  <div *ngIf="salaArray.length > 0">
+    <mat-card *ngFor="let s of salaArray" class="card-sala">
+      <mat-card-header>
+        <mat-card-title>
+          Sala: {{ s.nombre }}
+        </mat-card-title>
+        <ion-button
+          fill="clear"
+          color="primary"
+          slot="end"
+          [routerLink]="['/listado-alumnos', s.id]">
+          <ion-icon name="list-outline"></ion-icon>
+          Ver Alumnos
+        </ion-button>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Alumnos registrados: {{ s.alumnos?.length || 0 }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </ion-content>

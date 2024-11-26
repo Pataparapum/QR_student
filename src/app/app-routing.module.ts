@@ -30,7 +30,12 @@ const routes: Routes = [
     path: 'salas',
     loadChildren: () => import('./sala-clases/sala-clases.module').then( m => m.SalaClasesPageModule),
     canActivate: [LoginGuardService]
+  },
+  {
+    path: 'listado-alumnos/:id',
+    loadChildren: () => import('./listado-alumnos/listado-alumnos.module').then( m => m.ListadoAlumnosPageModule)
   }
+
 
 ];
 

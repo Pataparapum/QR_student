@@ -50,12 +50,24 @@ export class SalaService {
     return null;
   }
 
-  addAlumno(id:string, alumno:ALUMNO){
-    let sala:SALA = this.getSalaWithId(id)!;
-
-    sala?.alumnos?.push(alumno);
-
-    this.Storage.set('salas', this.salaArray);    
+  addAlumno(id: string, alumno: ALUMNO) {
+    console.log('addAlumno ejecutado para:', alumno);
+  
+    const sala: SALA = this.getSalaWithId(id)!;
+  
+    if (!sala.alumnos) {
+      sala.alumnos = [];
+    }
+  
+    // Evitar agregar duplicados
+    const existe = sala.alumnos.some((a) => a.id === alumno.id);
+    if (!existe) {
+      sala.alumnos.push(alumno);
+      this.Storage.set('salas', this.salaArray);
+    } else {
+      console.warn('Intento de agregar alumno duplicado:', alumno);
+    }
+  
     return this.salaArray;
   }
 
@@ -69,4 +81,10 @@ export class SalaService {
     }
     return null;
   }
+
+  delete(salaId: string) {
+    this.salaArray = this.salaArray.filter(sala => sala.id !== salaId);
+    this.Storage.set('salas', this.salaArray); // Actualizar el almacenamiento
+  }
+  
 }

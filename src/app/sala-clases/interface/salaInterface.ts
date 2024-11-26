@@ -1,7 +1,7 @@
 import { ALUMNO } from './alumnoInterface';
 
 interface SALA {
-    nombre:String,
+    nombre:string,
     id:string,
     alumnos?:ALUMNO[]
 }

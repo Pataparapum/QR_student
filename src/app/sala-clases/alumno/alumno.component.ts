@@ -7,6 +7,7 @@ import { ALUMNO } from '../interface/alumnoInterface';
 import { AlumnosControlService } from 'src/app/Services/alumnos-control.service';
 import { SALA } from '../interface/salaInterface';
 
+
 @Component({
   selector: 'app-alumno',
   templateUrl: './alumno.component.html',
@@ -26,15 +27,7 @@ export class AlumnoComponent  implements OnInit {
 
   ngOnInit() {}
 
-  agregarAlumnos(event:any){
-    let button:HTMLElement = event.target!;
-    let id:string = button.id;
-    let alumno:ALUMNO = this.alumnoControl.crearAlumno(this.nombreAlumno, id);
-    
-    const newSalas = this.salaDB.addAlumno(id, alumno);
-    this.newEven.emit(newSalas);
-    this.nombreAlumno = "";
-  }
+
 
 
 
