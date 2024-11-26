@@ -18,11 +18,6 @@ const routes: Routes = [
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
-    path: 'classroom',
-    loadChildren: () => import('./classroom/classroom.module').then( m => m.ClassroomPageModule),
-    canActivate: [LoginGuardService]
-  },
-  {
     path: 'registro',
     loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
   },
@@ -34,7 +29,11 @@ const routes: Routes = [
   {
     path: 'listado-alumnos/:id',
     loadChildren: () => import('./listado-alumnos/listado-alumnos.module').then( m => m.ListadoAlumnosPageModule)
+  },  {
+    path: 'perfil',
+    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   }
+
 
 
 ];

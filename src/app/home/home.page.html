@@ -8,9 +8,12 @@
     <!-- Título centrado -->
     <ion-title class="header-title">Inicio</ion-title>
 
-    <!-- Nombre del usuario y botón de cerrar sesión -->
+    <!-- Nombre del usuario con botón hacia el perfil -->
     <ion-buttons slot="end">
-      <ion-label class="user-name">{{ loggedUserName }}</ion-label>
+      <ion-button fill="clear" [routerLink]="['/perfil']">
+        <ion-label class="user-name">{{ loggedUserName }}</ion-label>
+        <ion-icon slot="end" name="person-circle-outline"></ion-icon>
+      </ion-button>
       <ion-button fill="clear" (click)="logout()">
         <ion-icon name="log-out-outline"></ion-icon>
       </ion-button>
