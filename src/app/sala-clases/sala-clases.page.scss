@@ -1,29 +1,186 @@
-.cardSala, .salaNameInput {
-    margin: 10px;
+/* Header */
+.header-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--ion-color-dark); /* Texto oscuro */
+  margin-right: auto; /* Empuja los botones hacia la derecha */
 }
-  
-  .empty-state {
-    text-align: center;
-    margin-top: 50px;
-  }
-  
-  .empty-icon {
-    font-size: 48px;
-    color: gray;
-    margin-bottom: 16px;
-  }
-  
-  .card-sala {
-    margin: 16px;
-  }
-  
-  mat-card-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+
+ion-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+ion-buttons {
+  display: flex;
+  gap: 8px; /* Espaciado entre botones */
+}
+
+ion-label.user-name {
+  font-size: 1rem;
+  color: var(--ion-color-primary); /* Azul corporativo */
+  font-weight: bold;
+  max-width: 120px; /* Limitar el ancho del nombre */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es largo */
+}
+
+ion-button {
+  font-size: 0.9rem;
+}
+
+ion-button[fill="clear"] {
+  --color: var(--ion-color-primary); /* Color corporativo */
+  font-weight: bold;
+}
+
+ion-button.logout {
+  color: var(--ion-color-danger); /* Color para el botón de cerrar sesión */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
   ion-button {
-    margin-left: 8px;
+    font-size: 0.8rem;
+    padding: 4px;
   }
-  
+
+  .header-title {
+    font-size: 1.2rem; /* Título más pequeño */
+  }
+
+  ion-toolbar {
+    flex-wrap: wrap; /* Ajusta elementos en varias líneas */
+  }
+
+  ion-label.user-name {
+    font-size: 0.9rem; /* Ajuste del tamaño del texto */
+    max-width: 80px; /* Reducir el ancho máximo */
+  }
+
+  ion-buttons {
+    gap: 4px; /* Menos espacio entre botones */
+  }
+}
+
+/* Contenido principal */
+.mobile-content {
+  --padding-top: 8px; /* Espaciado reducido */
+  --padding-bottom: 8px;
+}
+
+/* Formulario */
+.form-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff; /* Fondo claro */
+  margin-bottom: 12px; /* Espaciado debajo del formulario */
+}
+
+.form-card ion-card-header {
+  text-align: center;
+}
+
+.form-card ion-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #062646; /* Azul corporativo */
+}
+
+.form-icon {
+  font-size: 1.5rem;
+  margin-right: 8px;
+}
+
+/* Input */
+.input-item {
+  --min-height: 50px; /* Tamaño ajustado */
+  background: var(--ion-color-light); /* Fondo claro */
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 6px;
+}
+
+.input-item ion-label {
+  font-size: 1rem;
+  color: var(--ion-color-medium); /* Color de texto */
+}
+
+.input-item ion-input {
+  font-size: 1rem;
+  color: var(--ion-color-dark);
+  padding: 6px;
+}
+
+/* Botón */
+.btn-crear {
+  --background: #062646; /* Azul corporativo */
+  --color: white;
+  margin-top: 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Mensaje de lista vacía */
+.empty-state {
+  text-align: center;
+  margin-top: 20px; /* Reducido */
+  color: var(--ion-color-medium);
+}
+
+.empty-icon {
+  font-size: 48px;
+  color: var(--ion-color-medium);
+  margin-bottom: 8px; /* Reducido */
+}
+
+/* Listado de clases */
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Reducido */
+  padding: 0 8px; /* Espaciado lateral ajustado */
+}
+
+.sala-card {
+  border-radius: 12px;
+  background-color: var(--ion-color-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sala-card ion-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+}
+
+.sala-card p {
+  font-size: 0.9rem;
+  color: #666666; /* Color para texto complementario */
+  margin-bottom: 4px; /* Reducido */
+}
+
+/* Botones del listado */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px; /* Reducido */
+}
+
+.button-group ion-button {
+  flex: 1;
+  margin: 0 4px;
+  border-radius: 8px;
+}
+
+.button-group ion-button[color="danger"] {
+  --background: #d90429; /* Rojo para eliminar */
+  --color: white;
+}

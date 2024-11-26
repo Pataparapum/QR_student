@@ -1,21 +1,46 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Sala Clases</ion-title>
+    <!-- Menú en la izquierda -->
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-button slot="end" (click)="logout()" fill="clear">
-      <ion-icon name="log-out-outline"></ion-icon> Cerrar Sesión
-    </ion-button>
+
+    <!-- Título centrado -->
+    <ion-title class="header-title">Clases</ion-title>
+
+    <!-- Nombre del usuario y botón de cerrar sesión a la derecha -->
+    <ion-buttons slot="end" class="header-actions">
+      <ion-label class="user-name">{{ loggedUserName }}</ion-label>
+      <ion-button (click)="logout()" fill="clear">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+
+<ion-content [fullscreen]="true" class="mobile-content">
   <!-- Formulario para crear sala -->
-  <div class="salaNameInput">
-    <ion-label class="label-header" position="stacked">Nombre de la Sala</ion-label>
-    <ion-input [(ngModel)]="sala.nombre" placeholder="Escribe el nombre de la sala"></ion-input>
-    <ion-button expand="block" color="primary" (click)="crearSala()">Crear Sala</ion-button>
+  <div >
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-title>
+          Crear Nueva Sala
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="full" class="input-item">
+          <ion-label position="stacked">Nombre de la Sala</ion-label>
+          <ion-input
+            [(ngModel)]="sala.nombre"
+            placeholder="Ejemplo: Matemáticas 101">
+          </ion-input>
+        </ion-item>
+        <ion-button expand="block" (click)="crearSala()" class="btn-crear">
+          Crear Sala
+        </ion-button>
+      </ion-card-content>
+    </ion-card>    
   </div>
 
   <!-- Mensaje si no hay salas -->
@@ -24,23 +49,25 @@
     <p>No hay salas creadas aún.</p>
   </div>
 
-  <!-- Lista de salas -->
-  <div *ngIf="salaArray.length > 0">
-    <ion-list>
-      <ion-item *ngFor="let s of salaArray">
-        <ion-label>
-          <h2>{{ s.nombre }}</h2>
-          <p>Alumnos registrados: {{ s.alumnos?.length || 0 }}</p>
-        </ion-label>
-        <ion-buttons slot="end">
-          <ion-button color="primary" [routerLink]="['/listado-alumnos', s.id]">
-            <ion-icon name="list-outline"></ion-icon> Ver Alumnos
+  <!-- Listado de clases (NO MODIFICADO) -->
+  <div *ngIf="salaArray.length > 0" class="list-container">
+    <ion-card *ngFor="let s of salaArray" class="sala-card">
+      <ion-card-header>
+        <ion-card-title>{{ s.nombre }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Alumnos registrados: {{ s.alumnos?.length || 0 }}</p>
+        <div class="button-group">
+          <ion-button size="small" [routerLink]="['/listado-alumnos', s.id]">
+            <ion-icon slot="start" name="list-outline"></ion-icon>
+            Ver Alumnos
           </ion-button>
-          <ion-button color="danger" (click)="confirmarEliminarSala(s.id)">
-            <ion-icon name="trash-outline"></ion-icon> Eliminar
+          <ion-button size="small" color="danger" (click)="confirmarEliminarSala(s.id)">
+            <ion-icon slot="start" name="trash-outline"></ion-icon>
+            Eliminar
           </ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-list>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

@@ -10,6 +10,8 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./sala-clases.page.scss'],
 })
 export class SalaClasesPage implements OnInit {
+  usuario = localStorage.getItem('loggedUser');
+
   salaArray: SALA[] = [];
   sala: SALA = {
     nombre: '',
@@ -23,9 +25,12 @@ export class SalaClasesPage implements OnInit {
     private alertController: AlertController
   ) {}
 
+  loggedUserName: string | null = null;
+
   async ngOnInit() {
     // Cargar las salas existentes
     this.salaArray = await this.salaDB.get();
+    this.getLoggedUserName();
   }
 
   async crearSala() {
@@ -86,5 +91,12 @@ export class SalaClasesPage implements OnInit {
     localStorage.removeItem('loggedUser');
     this.router.navigate(['/login']);
     console.log('Sesión cerrada');
+  }
+
+  getLoggedUserName() {
+    // Recupera el nombre del usuario desde localStorage
+    const storedUserName = localStorage.getItem('loggedUser');
+    console.log('Nombre de usuario recuperado: ', storedUserName);  // Agregamos este log para depurar
+    this.loggedUserName = storedUserName;
   }
 }
