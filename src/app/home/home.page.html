@@ -31,4 +31,15 @@
   <!-- Título principal -->
   <h1 class="main-title">Bienvenido a RegistraAPP</h1>
   <p class="subtitle">Tu plataforma de registro de asistencia</p>
+
+  <!-- Botón para escanear Código QR -->
+  <ion-button expand="block" color="primary" (click)="startScanner()" class="scan-button">
+    Escanear Código QR
+  </ion-button>
+
+  <!-- Mostrar el resultado del escaneo -->
+  <div *ngIf="scannedData" class="scan-result">
+    <h2>Resultado del escaneo:</h2>
+    <p>{{ scannedData }}</p>
+  </div>
 </ion-content>

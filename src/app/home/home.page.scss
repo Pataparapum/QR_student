@@ -80,3 +80,15 @@ ion-buttons {
   color: var(--ion-text-color, #666);
   margin-bottom: 20px;
 }
+
+.scan-button {
+  margin-top: 20px;
+}
+
+.scan-result {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
