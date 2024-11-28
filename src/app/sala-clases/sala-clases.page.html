@@ -5,7 +5,6 @@
     </ion-buttons>
     <ion-title class="header-title">Clases</ion-title>
     <ion-buttons slot="end" class="header-actions">
-      <!-- Botón con el nombre del usuario que dirige a la página de perfil -->
       <ion-button [routerLink]="['/perfil']" fill="clear">
         <ion-label>{{ loggedUserName }}</ion-label>
       </ion-button>
@@ -17,7 +16,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="mobile-content">
-  <!-- Formulario para crear sala (Visible solo para Profesores) -->
+  <!-- Formulario para crear sala -->
   <div *ngIf="userRole === 'Profesor'">
     <ion-card class="form-card">
       <ion-card-header>
@@ -26,14 +25,9 @@
       <ion-card-content>
         <ion-item lines="full" class="input-item">
           <ion-label position="stacked">Nombre de la Sala</ion-label>
-          <ion-input
-            [(ngModel)]="sala.nombre"
-            placeholder="Ejemplo: Matemáticas 101">
-          </ion-input>
+          <ion-input [(ngModel)]="sala.nombre" placeholder="Ejemplo: Matemáticas 101"></ion-input>
         </ion-item>
-        <ion-button expand="block" (click)="crearSala()" class="btn-crear">
-          Crear Sala
-        </ion-button>
+        <ion-button expand="block" (click)="crearSala()" class="btn-crear">Crear Sala</ion-button>
       </ion-card-content>
     </ion-card>
   </div>
@@ -49,6 +43,10 @@
     <ion-card *ngFor="let s of salaArray" class="sala-card">
       <ion-card-header>
         <ion-card-title>{{ s.nombre }}</ion-card-title>
+        <!-- Usamos <ion-text> para mostrar la fecha -->
+        <ion-text color="medium">
+          <small>Creado el: {{ s.fechaCreacion }}</small>
+        </ion-text>
       </ion-card-header>
       <ion-card-content>
         <p>Alumnos registrados: {{ s.alumnos?.length || 0 }}</p>
@@ -57,12 +55,7 @@
             <ion-icon slot="start" name="list-outline"></ion-icon>
             Ver Alumnos
           </ion-button>
-          <!-- Botón de eliminar visible solo para Profesores -->
-          <ion-button
-            *ngIf="userRole === 'Profesor'"
-            size="small"
-            color="danger"
-            (click)="confirmarEliminarSala(s.id)">
+          <ion-button *ngIf="userRole === 'Profesor'" size="small" color="danger" (click)="confirmarEliminarSala(s.id)">
             <ion-icon slot="start" name="trash-outline"></ion-icon>
             Eliminar
           </ion-button>

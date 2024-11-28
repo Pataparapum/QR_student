@@ -1,0 +1,40 @@
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .form-card {
+    margin: 16px;
+  }
+  
+  .empty-state {
+    text-align: center;
+    margin-top: 40px;
+    color: #7a7a7a;
+  }
+  
+  .empty-icon {
+    font-size: 4rem;
+    color: #c0c0c0;
+  }
+  
+  .alumnos-list {
+    margin: 16px;
+  }
+  
+  .qr-card {
+    margin: 16px;
+    text-align: center;
+  }
+  
+  .qr-container img {
+    margin-top: 16px;
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+  }
+  

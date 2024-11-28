@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SalaService } from '../Services/sala.service';
 import { ALUMNO } from '../sala-clases/interface/alumnoInterface';
-import { FormsModule } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
 import * as QRCode from 'qrcode';
+import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 
 @Component({
   selector: 'app-listado-alumnos',
@@ -13,24 +14,39 @@ import * as QRCode from 'qrcode';
 export class ListadoAlumnosPage implements OnInit {
   alumnos: ALUMNO[] = [];
   salaID: string = '';
-  salaNombre: string = '';
+  salaNombre: string = ''; // Este valor debe inicializarse correctamente
   nombreAlumno: string = '';
-  qrCodeUrl: string = ''; // Variable para almacenar la URL del QR generado
+  qrCodeUrl: string = '';
+  loggedUserName: string | null = null;
 
-  constructor(private route: ActivatedRoute, private salaService: SalaService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private salaService: SalaService,
+    private alertController: AlertController
+  ) {}
 
   ngOnInit() {
     this.salaID = this.route.snapshot.paramMap.get('id') || '';
+    this.cargarSala(); // Encapsular la lógica en un método para claridad
+    this.getLoggedUserName();
+  }
+
+  cargarSala() {
     const sala = this.salaService.getSalaWithId(this.salaID);
 
     if (sala) {
-      this.salaNombre = sala.nombre;
+      this.salaNombre = sala.nombre; // Asegurarse de que el nombre se asigne correctamente
       this.alumnos = sala.alumnos || [];
+    } else {
+      console.error('No se encontró la sala con el ID proporcionado.');
     }
   }
 
+  getLoggedUserName() {
+    this.loggedUserName = localStorage.getItem('loggedUser') || null;
+  }
+
   agregarAlumno() {
-    console.log('Método agregarAlumno llamado'); // Depuración
     if (!this.nombreAlumno.trim()) {
       console.error('El nombre del alumno es obligatorio');
       return;
@@ -46,13 +62,11 @@ export class ListadoAlumnosPage implements OnInit {
     const sala = this.salaService.getSalaWithId(this.salaID);
     if (sala) {
       sala.alumnos = sala.alumnos || [];
-      
-      // Verificar si ya existe el alumno antes de agregarlo
       const existe = sala.alumnos.some((a) => a.nombre === nuevoAlumno.nombre);
       if (!existe) {
         sala.alumnos.push(nuevoAlumno);
         this.salaService.addAlumno(this.salaID, nuevoAlumno);
-        this.alumnos = sala.alumnos; // Actualizar la lista local
+        this.alumnos = sala.alumnos;
       } else {
         console.warn('El alumno ya existe:', nuevoAlumno);
       }
@@ -64,7 +78,7 @@ export class ListadoAlumnosPage implements OnInit {
   generarQRCode() {
     QRCode.toDataURL(this.salaID)
       .then((url) => {
-        this.qrCodeUrl = url; // Guardar la URL generada
+        this.qrCodeUrl = url;
       })
       .catch((err) => {
         console.error('Error al generar el código QR:', err);
@@ -74,23 +88,13 @@ export class ListadoAlumnosPage implements OnInit {
   marcarAsistencia(alumnoID: string) {
     const sala = this.salaService.getSalaWithId(this.salaID);
     if (sala) {
-      sala.alumnos = sala.alumnos || []; // Asegura que 'alumnos' no sea undefined
-      const alumno = sala.alumnos.find((a) => a.id === alumnoID);
+      const alumno = sala.alumnos?.find((a) => a.id === alumnoID);
       if (alumno) {
-        alumno.asistencia = !alumno.asistencia; // Alterna el estado de asistencia
-        this.salaService.updateSala(this.salaID, sala); // Guarda los cambios en localStorage
-        console.log(`Asistencia actualizada para ${alumno.nombre}: ${alumno.asistencia}`);
+        alumno.asistencia = !alumno.asistencia;
+        this.salaService.updateSala(this.salaID, sala);
       } else {
         console.error(`Alumno con ID ${alumnoID} no encontrado.`);
       }
-    } else {
-      console.error(`Sala con ID ${this.salaID} no encontrada.`);
     }
   }
-  
-  
-
-  
-
-  
 }

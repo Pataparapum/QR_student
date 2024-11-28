@@ -12,7 +12,7 @@ import { AlertController } from '@ionic/angular';
 export class SalaClasesPage implements OnInit {
   usuario = localStorage.getItem('loggedUser');
   salaArray: SALA[] = [];
-  sala: SALA = { nombre: '', id: '', alumnos: [] };
+  sala: SALA = { nombre: '', id: '', alumnos: [], fechaCreacion: '' };
   loggedUserName: string | null = null;
   userRole: string | null = null;
 
@@ -30,18 +30,15 @@ export class SalaClasesPage implements OnInit {
 
   async loadSalas() {
     const allSalas = await this.salaDB.get();
-  
+
     if (this.userRole === 'Alumno') {
-      // Filtrar salas donde el usuario logueado esté registrado como alumno
       this.salaArray = allSalas.filter((s) =>
         (s.alumnos || []).some((alumno) => alumno.nombre === this.loggedUserName)
       );
     } else {
-      // Si es profesor, mostrar todas las salas
       this.salaArray = allSalas;
     }
   }
-  
 
   async crearSala() {
     if (this.userRole !== 'Profesor') {
@@ -62,7 +59,15 @@ export class SalaClasesPage implements OnInit {
     const nuevaSala: SALA = {
       nombre: this.sala.nombre.trim(),
       id: (Math.random() * 100000).toFixed(0),
-      alumnos: [], // Inicializado correctamente
+      alumnos: [],
+      fechaCreacion: new Date().toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
     };
 
     await this.salaDB.push(nuevaSala);
@@ -84,9 +89,6 @@ export class SalaClasesPage implements OnInit {
           text: 'Cancelar',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: () => {
-            console.log('Eliminación cancelada');
-          },
         },
         {
           text: 'Eliminar',
