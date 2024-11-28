@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { HttpUserService } from '../Services/http-user.service';
+import { userInterface } from '../Services/interface/userDto';
 
 @Injectable({
   providedIn: 'root',
@@ -24,9 +23,18 @@ export class RegistroService {
     if (existingUser) {
       return false; 
     }
-  
+    
+    const newUser:userInterface =  {
+      email,
+      username: fullName,
+      password
+    }
+
+    this.api.registerUser(newUser);
+
     users.push({ fullName, email, password, role }); // Se agrega el rol
     localStorage.setItem(this.storageKey, JSON.stringify(users));
+
     return true; 
   }
   

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular'
-;
-import { SALA } from '../sala-clases/interface/salaInterface';
+import { Storage } from '@ionic/storage-angular';
+import { SALA } from '../sala-clases/interface/salas';
 
 @Injectable({
   providedIn: 'root'

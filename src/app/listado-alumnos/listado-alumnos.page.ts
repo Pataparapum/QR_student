@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SalaService } from '../Services/sala.service';
-import { ALUMNO } from '../sala-clases/interface/alumnoInterface';
 import { AlertController } from '@ionic/angular';
 import * as QRCode from 'qrcode';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+import { alumonInterface } from '../Services/interface/alumno.dto';
+import { AlumnosControlService } from '../Services/alumnos-control.service';
+import { asistenciaInterface } from '../Services/interface/asistencia.dto';
 
 @Component({
   selector: 'app-listado-alumnos',
@@ -12,16 +14,24 @@ import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
   styleUrls: ['./listado-alumnos.page.scss'],
 })
 export class ListadoAlumnosPage implements OnInit {
-  alumnos: ALUMNO[] = [];
+  alumnos: alumonInterface[] = [];
+  asiste:asistenciaInterface = {
+    salaId: "",
+    alumnoId: "",
+    asistencia: false,
+    justificado: false
+  }
   salaID: string = '';
   salaNombre: string = ''; // Este valor debe inicializarse correctamente
   nombreAlumno: string = '';
+  correo:string = '';
   qrCodeUrl: string = '';
   loggedUserName: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private salaService: SalaService,
+    private alumnoService: AlumnosControlService,
     private alertController: AlertController
   ) {}
 
@@ -52,20 +62,19 @@ export class ListadoAlumnosPage implements OnInit {
       return;
     }
 
-    const nuevoAlumno: ALUMNO = {
-      id: (Math.random() * 100000).toFixed(0),
-      idSala: this.salaID,
-      nombre: this.nombreAlumno.trim(),
-      asistencia: false,
+    const nuevoAlumno: alumonInterface = {
+      full_name: this.nombreAlumno.trim(),
+      userId:""
     };
 
     const sala = this.salaService.getSalaWithId(this.salaID);
     if (sala) {
       sala.alumnos = sala.alumnos || [];
-      const existe = sala.alumnos.some((a) => a.nombre === nuevoAlumno.nombre);
+      const existe = sala.alumnos.some((a:alumonInterface) => a.full_name === nuevoAlumno.full_name);
       if (!existe) {
-        sala.alumnos.push(nuevoAlumno);
-        this.salaService.addAlumno(this.salaID, nuevoAlumno);
+        const alumno:alumonInterface = this.alumnoService.crearAlumno(this.correo, nuevoAlumno)
+        sala.alumnos.push(alumno);
+        this.salaService.addAlumno(this.salaID, alumno);
         this.alumnos = sala.alumnos;
       } else {
         console.warn('El alumno ya existe:', nuevoAlumno);
@@ -88,9 +97,10 @@ export class ListadoAlumnosPage implements OnInit {
   marcarAsistencia(alumnoID: string) {
     const sala = this.salaService.getSalaWithId(this.salaID);
     if (sala) {
-      const alumno = sala.alumnos?.find((a) => a.id === alumnoID);
+      const alumno = sala.alumnos?.find((a:alumonInterface) => a.userId === alumnoID);
       if (alumno) {
-        alumno.asistencia = !alumno.asistencia;
+        this.asiste.asistencia = true
+        this.asiste.alumnoId = alumno.id!
         this.salaService.updateSala(this.salaID, sala);
       } else {
         console.error(`Alumno con ID ${alumnoID} no encontrado.`);

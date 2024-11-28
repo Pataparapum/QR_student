@@ -1,8 +1,10 @@
+import { SALA } from './interface/salas';
 import { Component, OnInit } from '@angular/core';
-import { SALA } from './interface/salaInterface';
 import { SalaService } from '../Services/sala.service';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { ALUMNO } from './interface/alumno';
+import { alumonInterface } from '../Services/interface/alumno.dto';
 
 @Component({
   selector: 'app-sala-clases',
@@ -33,7 +35,7 @@ export class SalaClasesPage implements OnInit {
 
     if (this.userRole === 'Alumno') {
       this.salaArray = allSalas.filter((s) =>
-        (s.alumnos || []).some((alumno) => alumno.nombre === this.loggedUserName)
+        (s.alumnos || []).some((alumno:alumonInterface) => alumno.full_name === this.loggedUserName)
       );
     } else {
       this.salaArray = allSalas;
@@ -70,7 +72,7 @@ export class SalaClasesPage implements OnInit {
       }),
     };
 
-    await this.salaDB.push(nuevaSala);
+    this.salaDB.push(nuevaSala);
     this.salaArray = await this.salaDB.get();
     this.sala.nombre = '';
   }

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { SALA } from '../sala-clases/interface/salaInterface';
-import { ALUMNO } from '../sala-clases/interface/alumnoInterface';
+import { SALA } from '../sala-clases/interface/salas';
+import { HttpClient } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { v4 as uuidv4 } from 'uuid';
+import { alumonInterface } from './interface/alumno.dto';
+import { salaInterface } from './interface/sala.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +12,11 @@ import { v4 as uuidv4 } from 'uuid';
 export class SalaService {
   salaArray: SALA[] = [];
 
-  constructor(private Storage: StorageService) {
+  constructor(private Storage: StorageService, private api:HttpClient) {
     this.getData();
   }
+
+  url = "https://qrstudent-api.vercel.app/salas";
 
   async getData() {
     await this.Storage.get('salas').then((r) => {
@@ -26,6 +30,7 @@ export class SalaService {
     sala.id = uuidv4();
     this.salaArray.push(sala);
     this.Storage.set('salas', this.salaArray);
+    
   }
 
   async get() {
@@ -37,9 +42,7 @@ export class SalaService {
     return this.salaArray.find((sala) => sala.id === id) || null;
   }
 
-  addAlumno(id: string, alumno: ALUMNO) {
-    console.log('addAlumno ejecutado para:', alumno);
-
+  addAlumno(id: string, alumno: alumonInterface) {
     const sala: SALA = this.getSalaWithId(id)!;
 
     if (!sala.alumnos) {
@@ -47,8 +50,15 @@ export class SalaService {
     }
 
     // Evitar agregar duplicados
-    const existe = sala.alumnos.some((a) => a.id === alumno.id);
+    const existe = sala.alumnos.some((a) => a.userId === alumno.userId);
     if (!existe) {
+
+      const nuevaSala:salaInterface = {
+        curso: sala.nombre,
+        alumnoid: alumno.id!
+      }
+
+      this.api.post(`${this.url}`, nuevaSala );
       sala.alumnos.push(alumno);
       this.Storage.set('salas', this.salaArray);
     } else {
@@ -58,9 +68,9 @@ export class SalaService {
     return this.salaArray;
   }
 
-  findAlumnoForId(alumnoId: string, salaId: string): ALUMNO | null {
+  findAlumnoForId(alumnoId: string, salaId: string): alumonInterface | null {
     const sala = this.getSalaWithId(salaId);
-    return sala?.alumnos?.find((alumno) => alumno.id === alumnoId) || null;
+    return sala?.alumnos?.find((alumno) => alumno.userId === alumnoId) || null;
   }
 
   delete(salaId: string) {

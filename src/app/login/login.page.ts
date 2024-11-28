@@ -52,17 +52,10 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    if (password.length < 6) {
-      this.errorMessage = 'La contraseña debe tener al menos 6 caracteres';
-      await this.presentAlert(this.errorMessage);
-      return;
-    }
-
     if (this.authService.ingresar(userName, password)) {
-    
+      
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('loggedUser', userName); 
-      console.log(this.api.login(userName, password));
 
 
       console.log('Usuario logueado: ', userName);  

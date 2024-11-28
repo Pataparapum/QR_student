@@ -1,0 +1,6 @@
+{
+    "/api": {
+    "target": "https://qrstudent-api.vercel.app/",
+    "secure": false
+    }
+    }

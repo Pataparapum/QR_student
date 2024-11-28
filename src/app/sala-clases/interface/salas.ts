@@ -1,9 +1,10 @@
-import { ALUMNO } from './alumnoInterface';
+import { alumonInterface } from 'src/app/Services/interface/alumno.dto';
+import { ALUMNO } from './alumno';
 
 interface SALA {
     nombre: string;
     id: string;
-    alumnos?: ALUMNO[];
+    alumnos?: alumonInterface[];
     fechaCreacion?: string; // Nuevo atributo para guardar la fecha
   }
   

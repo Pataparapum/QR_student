@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { SalaService } from 'src/app/Services/sala.service';
-import { ALUMNO } from '../interface/alumnoInterface';
+import { ALUMNO } from '../interface/alumno';
 import { AlumnosControlService } from 'src/app/Services/alumnos-control.service';
-import { SALA } from '../interface/salaInterface';
+import { SALA } from '../interface/salas';
 
 
 @Component({

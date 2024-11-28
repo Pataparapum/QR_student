@@ -1,7 +1,11 @@
-import { SalaService } from 'src/app/Services/sala.service';
+import { Data } from '@angular/router';
+import { alumonInterface } from './interface/alumno.dto';
 import { Injectable } from '@angular/core';
-import { ALUMNO } from '../sala-clases/interface/alumnoInterface';
+import { HttpClient } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
+import { asistenciaInterface } from './interface/asistencia.dto';
+import { catchError, firstValueFrom, map, Observable } from 'rxjs';
+import { userInterface } from '../login/login.interface';
 
 
 @Injectable({
@@ -9,21 +13,32 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class AlumnosControlService {
 
-  id:number = 0;
+  alumnosUrl = "https://qrstudent-api.vercel.app/alumnos";
+  asistenciaUrl = "https://qrstudent-api.vercel.app/asistencia";
 
-  constructor() { }
+  constructor(private api:HttpClient) { }
 
-  crearAlumno(nombre:string, salaId:string): ALUMNO {
+  alumno:alumonInterface = {
+    full_name:"",
+    userId:""
+  }
 
-    let alumno:ALUMNO = {
-      nombre:nombre,
-      id: uuidv4(),
-      idSala:salaId,
-      asistencia: false
-    };
+  crearAlumno(correo:string, alumno:alumonInterface): alumonInterface {
+     this.api.post<alumonInterface>(`${this.alumnosUrl}/${correo}`, alumno).pipe(
+      map((resp) => {
+        alumno.id = resp.id
+        alumno.full_name = resp.full_name,
+        alumno.userId = resp.userId
+      }),
+    )
+    return alumno
+  }
 
-
-    return alumno;
+  marcarAsistencia(asistencia:asistenciaInterface) {
+    return this.api.post(`${this.asistenciaUrl}`, asistencia).subscribe((data:any) => {
+      if (data.status == 201) return true;
+      return false;
+    })
   }
     
 }

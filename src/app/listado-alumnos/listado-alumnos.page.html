@@ -33,12 +33,12 @@
   <ion-list *ngIf="alumnos.length > 0" class="alumnos-list">
     <ion-item *ngFor="let alumno of alumnos">
       <ion-label>
-        {{ alumno.nombre }}
+        {{ alumno.full_name }}
       </ion-label>
       <ion-checkbox
         slot="end"
-        [(ngModel)]="alumno.asistencia"
-        (ionChange)="marcarAsistencia(alumno.id)">
+        [(ngModel)]="asiste.asistencia"
+        (ionChange)="marcarAsistencia(alumno.id!)">
       </ion-checkbox>
     </ion-item>
   </ion-list>
