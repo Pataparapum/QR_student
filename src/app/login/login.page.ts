@@ -12,7 +12,7 @@ import { HttpUserService } from '../Services/http-user.service';
 })
 export class LoginPage implements OnInit {
   userForm = {
-    userName: '',
+    correo: '',
     password: ''
   };
 
@@ -37,11 +37,11 @@ export class LoginPage implements OnInit {
     event.preventDefault();
     this.errorMessage = null;
 
-    const { userName, password } = this.userForm;
+    const { correo, password } = this.userForm;
 
     // Validaciones
-    if (!userName) {
-      this.errorMessage = 'El nombre de usuario es requerido';
+    if (!correo) {
+      this.errorMessage = 'El nombre correo del usuario es requerido';
       await this.presentAlert(this.errorMessage);
       return;
     }
@@ -52,17 +52,17 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    let userExist = await this.authService.ingresar(userName, password)
+    let userExist = await this.authService.ingresar(correo, password)
     if (userExist) {
       
-      localStorage.setItem('loggedUser', userName); 
+      localStorage.setItem('loggedUser', correo); 
 
-      console.log('Usuario logueado: ', userName);  
+      console.log('Usuario logueado: ', correo);  
 
       await this.presentAlert('Login exitoso');
       
       this.userForm.password = "";
-      this.userForm.userName = "";
+      this.userForm.correo = "";
 
       this.navigateToAbout();
     } else {

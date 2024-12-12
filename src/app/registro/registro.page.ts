@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { RegistroService } from './registro.service';
 import { AlumnosControlService } from '../Services/alumnos-control.service';
 import { alumnoInterface } from '../Services/interface/alumno.dto';
+import { HttpUserService } from '../Services/http-user.service';
+import { logInterface } from '../Services/interface/logDto';
 
 @Component({
   selector: 'app-registro',
@@ -20,7 +22,11 @@ export class RegistroPage implements OnInit {
 
   errorMessage: string | null = null;
 
-  constructor(private registroService: RegistroService, private router: Router) {}
+  constructor(
+    private registroService: RegistroService,
+    private router: Router,
+    private userService:HttpUserService,
+    private alumnoService:AlumnosControlService) {}
 
   ngOnInit() {}
 
@@ -64,7 +70,16 @@ export class RegistroPage implements OnInit {
     const success = await this.registroService.register(fullName, email, password, role);
   
     if (success) {  
-    this.logUsers();
+      this.logUsers();
+
+      let userId = await this.userService.getUserForCorreo(email);
+
+      const newALumno:alumnoInterface = {
+        userId:userId?.id!,
+        full_name: fullName,
+      }
+
+      let alumno = await this.alumnoService.crearAlumno(email, newALumno)
 
       this.registerForm = {
         fullName: '',
@@ -74,7 +89,12 @@ export class RegistroPage implements OnInit {
         role: ''
       };
 
-      
+      let login:logInterface = {
+        email: email,
+        password: password
+      }
+
+      await this.userService.login(login);
       this.router.navigate(['/login']);
     } else {
       this.errorMessage = 'El usuario ya está registrado';

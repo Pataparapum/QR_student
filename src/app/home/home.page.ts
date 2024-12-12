@@ -32,7 +32,6 @@ export class HomePage implements OnInit {
   }
 
   async logout() {
-    localStorage.removeItem('loggedUser');
     await this.api.logout();
 
     this.router.navigate(['/login']);

@@ -1,7 +1,7 @@
 import { Data } from '@angular/router';
 import { alumnoInterface } from './interface/alumno.dto';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { asistenciaInterface } from './interface/asistencia.dto';
 import { catchError, firstValueFrom, map, Observable } from 'rxjs';
@@ -25,7 +25,7 @@ export class AlumnosControlService {
 
   async crearAlumno(correo:string, nuevoAlumno:alumnoInterface)  {
      let add = this.api.post<alumnoInterface>(`${this.alumnosUrl}/${correo}`, nuevoAlumno)
-
+      
      const alumno = 
       await firstValueFrom(add)
         .then( (data:alumnoInterface) => {
@@ -38,11 +38,19 @@ export class AlumnosControlService {
     return alumno
   }
 
-  marcarAsistencia(asistencia:asistenciaInterface) {
-    let marcarAsistencia = this.api.post(`${this.asistenciaUrl}`, asistencia)
+  async marcarAsistencia(asistencia:asistenciaInterface) {
+    const opciones = {
+      headers: new HttpHeaders({
+        'Content-Type': 'aplication/json',
+        'Authorization':`Bearer ${localStorage.getItem('token')!}`
+      })
+        
+    }
+    
+    let marcarAsistencia = this.api.post(`${this.asistenciaUrl}`, asistencia, opciones)
 
     let setAsistencia = 
-      firstValueFrom(marcarAsistencia)
+      await firstValueFrom(marcarAsistencia)
       .then((data:any) => {
         return true;
       })
@@ -54,19 +62,41 @@ export class AlumnosControlService {
   }
 
   async alumnoExiste(userId:string) {
-    let datos = this.api.get<alumnoInterface[]>(`${this.alumnosUrl}`)
+
+    const opciones = {
+      headers: new HttpHeaders({
+        'Content-Type': 'aplication/json',
+        'Authorization':`Bearer ${localStorage.getItem('token')!}`
+      })
+    }
+
+    let datos = this.api.get<alumnoInterface[]>(`${this.alumnosUrl}`, opciones)
 
     let alumnos:alumnoInterface[] = 
       await firstValueFrom(datos)
-        .then(data => {
-          return data;
+        .then((data:any) => {
+          return data.data;
         })
 
-    for (let alumno of alumnos) {
-      if (alumno.userId === userId) return alumno.id;
+    for (let index = 0; index < alumnos.length; index++) {      
+      if (alumnos[index].userId == userId) return alumnos[index].id;
     }
 
     return undefined;
   }
-    
+  
+  async getAlumnoForId(userId:string) {
+    const opciones = {
+      headers: new HttpHeaders({
+        'Content-Type': 'aplication/json',
+        'Authorization':`Bearer ${localStorage.getItem('token')!}`
+      })
+    }
+
+    let alumno = this.api.get(`${this.alumnosUrl}/${userId}`, opciones);
+
+    let datos = await firstValueFrom(alumno).then((data:any) => {return data.data});
+
+    return datos
+  }
 }

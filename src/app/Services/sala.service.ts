@@ -1,6 +1,7 @@
+import { Data } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { SALA } from '../sala-clases/interface/salas';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { v4 as uuidv4 } from 'uuid';
 import { alumnoInterface } from './interface/alumno.dto';
@@ -8,6 +9,7 @@ import { salaInterface } from './interface/sala.dto';
 import { firstValueFrom } from 'rxjs';
 import { AlumnosControlService } from './alumnos-control.service';
 import { HttpUserService } from './http-user.service';
+import { userInterface } from '../login/login.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -45,44 +47,43 @@ export class SalaService {
     return this.salaArray.find((sala) => sala.id === id) || null;
   }
 
-  async addAlumno(id: string, correo:string) {
+  getSalaWithName(name:string): SALA | null {
+    return this.salaArray.find((sala) => sala.nombre === name) || null;
+  }
+
+  async addAlumno(id: string, correo:string, alumnoid:string) {
     const sala: SALA = this.getSalaWithId(id)!;
 
-    //saber si el alumno existe en la base de datos
-    let user = await this.userService.getUserForCorreo(correo);
-
-    if (!user) console.warn('el alumno no esta ingresado:', user);
-
-    const alumnoExist = await this.alumnoService.alumnoExiste(user?.id!) 
-
-    if (!alumnoExist) console.warn('El alumno no esta ingresado:', alumnoExist);
     if (!sala.salas) sala.salas = [];
 
     const alumno:salaInterface = {
       curso: sala.nombre,
-      alumnoid: alumnoExist!
+      alumnoid: alumnoid!
     }
 
-    // Evitar agregar duplicados
-    const allAlumnos = this.api.get(`${this.url}/cursos/${sala.nombre}`);
+    const opciones = {
+      headers: new HttpHeaders({
+        'Content-Type': 'aplication/json',
+        'Authorization':`Bearer ${localStorage.getItem('token')!}`
+      })
+        
+    }
 
-    const existe =
+    const allAlumnos = this.api.post(`${this.url}` ,alumno, opciones);
+
+    const data =
       await firstValueFrom(allAlumnos)
         .then((data:any) => {
-          for (let alumnos of data.data) {
-            if (alumnos.alumnoid === alumno.alumnoid && alumnos.curso === alumno.curso) return true
-          }
-          return false;
+          return data.data
         }).catch(err => {
-          return true;
+           return err
         })
-
-    if (existe) console.warn('Intento de agregar alumno duplicado:', alumno);  
+    
 
     sala.salas.push(alumno);
     this.Storage.set('salas', this.salaArray);
     
-    return this.salaArray;
+    return data;
   }
 
   findAlumnoForId(alumnoId: string, salaId: string): salaInterface | null {
@@ -90,10 +91,37 @@ export class SalaService {
     return sala?.salas?.find((alumno) => alumno.alumnoid === alumnoId) || null;
   }
 
+  async getAllAlumnosOfSala(salaName:string) {
+    const opciones = {
+      headers: new HttpHeaders({
+        'Content-Type': 'aplication/json',
+        'Authorization':`Bearer ${localStorage.getItem('token')!}`
+      })
+        
+    }
+
+    const alumnos = this.api.get(`${this.url}/cursos/${salaName}`, opciones);
+
+    const data = await firstValueFrom(alumnos).then((data:any) => {
+      return data.alumno;
+    });
+
+    if (data) return data
+    return [];
+  }
+
   async delete(salaId: string) {
+    const opciones = {
+      headers: new HttpHeaders({
+        'Content-Type': 'aplication/json',
+        'Authorization':`Bearer ${localStorage.getItem('token')!}`
+      })
+        
+    }
+
     this.salaArray = this.salaArray.filter((sala) => sala.id !== salaId);
 
-    let borrar = this.api.delete(`${this.url}/${salaId}`);
+    let borrar = this.api.delete(`${this.url}/${salaId}`,opciones);
 
     const dato = await firstValueFrom(borrar).then();
 
@@ -105,8 +133,16 @@ export class SalaService {
 
     if (index !== -1) {
       this.salaArray[index] = updatedSala; // Actualiza la sala en el array
+
+      const opciones = {
+        headers: new HttpHeaders({
+          'Content-Type': 'aplication/json',
+          'Authorization':`Bearer ${localStorage.getItem('token')!}`
+        })
+          
+      }
       
-      let update = this.api.put(`${this.url}/${salaID}`, updatedSala.salas);
+      let update = this.api.put(`${this.url}/${salaID}`, updatedSala.salas, opciones);
 
       const dato = await firstValueFrom(update).then()
 

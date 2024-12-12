@@ -7,6 +7,9 @@ import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { alumnoInterface } from '../Services/interface/alumno.dto';
 import { AlumnosControlService } from '../Services/alumnos-control.service';
 import { asistenciaInterface } from '../Services/interface/asistencia.dto';
+import { salaInterface } from '../Services/interface/sala.dto';
+import { HttpUserService } from '../Services/http-user.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-listado-alumnos',
@@ -23,7 +26,6 @@ export class ListadoAlumnosPage implements OnInit {
   }
   salaID: string = '';
   salaNombre: string = ''; // Este valor debe inicializarse correctamente
-  nombreAlumno: string = '';
   correo:string = '';
   qrCodeUrl: string = '';
   loggedUserName: string | null = null;
@@ -32,23 +34,28 @@ export class ListadoAlumnosPage implements OnInit {
     private route: ActivatedRoute,
     private salaService: SalaService,
     private alumnoService: AlumnosControlService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private userService:HttpUserService
   ) {}
 
-  ngOnInit() {
-    this.salaID = this.route.snapshot.paramMap.get('id') || '';
+  async ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.salaID = params['id'];
+    })
     this.cargarSala(); // Encapsular la lógica en un método para claridad
     this.getLoggedUserName();
   }
 
-  cargarSala() {
+  async cargarSala() {
     const sala = this.salaService.getSalaWithId(this.salaID);
+    const getAlumnos = await this.salaService.getAllAlumnosOfSala(sala?.nombre!);
+    
 
     if (sala) {
       this.salaNombre = sala.nombre; // Asegurarse de que el nombre se asigne correctamente
-      this.alumnos = sala.alumnos || [];
+      this.alumnos = getAlumnos;
     } else {
-      console.error('No se encontró la sala con el ID proporcionado.');
+      console.error('No se encontró alumnos en la sala actual proporcionado.');
     }
   }
 
@@ -57,35 +64,46 @@ export class ListadoAlumnosPage implements OnInit {
   }
 
   async agregarAlumno() {
-    if (!this.nombreAlumno.trim()) {
-      console.error('El nombre del alumno es obligatorio');
+    if (!this.correo.trim()) {
+      console.error('El correo del alumno es obligatorio');
       return;
     }
 
-    const nuevoAlumno: alumnoInterface = {
-      full_name: this.nombreAlumno.trim(),
-      userId:""
-    };
+    let user = await this.userService.getUserForCorreo(this.correo);
+
+    let userId = user.id
+
+    const alumno = await this.alumnoService.alumnoExiste(userId)      
 
     const sala = this.salaService.getSalaWithId(this.salaID);
-    if (sala) {
-      sala.alumnos = sala.alumnos || [];
-      const existe = sala.alumnos.some((a:alumnoInterface) => a.full_name === nuevoAlumno.full_name);
-      if (!existe) {
-        const alumno:alumnoInterface | undefined = await this.alumnoService.crearAlumno(this.correo, nuevoAlumno)
 
-        if (alumno){
-          sala.alumnos.push(alumno);
-          this.salaService.addAlumno(this.salaID, alumno);
-          this.alumnos = sala.alumnos;
-        } else console.warn('error al marcar la asistencia');
+    console.log(sala, alumno);
+    
+
+    if (sala && alumno) {
+      sala.salas = sala.salas || [];
+      console.log(sala.salas);
+      
+      const existe = sala.salas.some((a:salaInterface) => a.alumnoid === alumno);
+      
+      if (!existe) {
+        let data = await this.salaService.addAlumno(sala.id, this.correo, alumno);
+
+        this.addAlumnoInScreen(alumno);
         
       } else {
-        console.warn('El alumno ya existe:', nuevoAlumno);
+        console.warn('El alumno ya existe:', alumno);
       }
     }
 
-    this.nombreAlumno = '';
+    
+
+    this.correo = '';
+  }
+
+  async addAlumnoInScreen(alumnoid:string) {
+    let alumno = await this.alumnoService.getAlumnoForId(alumnoid);
+    this.alumnos.push(alumno);
   }
 
   generarQRCode() {
@@ -101,10 +119,10 @@ export class ListadoAlumnosPage implements OnInit {
   marcarAsistencia(alumnoID: string) {
     const sala = this.salaService.getSalaWithId(this.salaID);
     if (sala) {
-      const alumno = sala.alumnos?.find((a:alumnoInterface) => a.userId === alumnoID);
+      const alumno = sala.salas?.find((a:salaInterface) => a.alumnoid === alumnoID);
       if (alumno) {
         this.asiste.asistencia = true
-        this.asiste.alumnoId = alumno.id!
+        this.asiste.alumnoId = alumno.alumnoid!
         this.salaService.updateSala(this.salaID, sala);
       } else {
         console.error(`Alumno con ID ${alumnoID} no encontrado.`);
