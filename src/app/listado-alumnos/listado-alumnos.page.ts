@@ -5,6 +5,7 @@ import { AlertController } from '@ionic/angular';
 import * as QRCode from 'qrcode';
 import { alumonInterface } from '../Services/interface/alumno.dto';
 import { asistenciaInterface } from '../Services/interface/asistencia.dto';
+import { AlumnosControlService } from '../Services/alumnos-control.service';
 
 @Component({
   selector: 'app-listado-alumnos',
