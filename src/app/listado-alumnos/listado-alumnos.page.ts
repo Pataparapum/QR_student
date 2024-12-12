@@ -3,9 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SalaService } from '../Services/sala.service';
 import { AlertController } from '@ionic/angular';
 import * as QRCode from 'qrcode';
-import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { alumonInterface } from '../Services/interface/alumno.dto';
-import { AlumnosControlService } from '../Services/alumnos-control.service';
 import { asistenciaInterface } from '../Services/interface/asistencia.dto';
 
 @Component({
@@ -22,11 +20,12 @@ export class ListadoAlumnosPage implements OnInit {
     justificado: false
   }
   salaID: string = '';
-  salaNombre: string = ''; // Este valor debe inicializarse correctamente
+  salaNombre: string = '';
   nombreAlumno: string = '';
   correo:string = '';
   qrCodeUrl: string = '';
   loggedUserName: string | null = null;
+  userRole: string | null = null; // Para controlar el rol del usuario
 
   constructor(
     private route: ActivatedRoute,
@@ -37,15 +36,16 @@ export class ListadoAlumnosPage implements OnInit {
 
   ngOnInit() {
     this.salaID = this.route.snapshot.paramMap.get('id') || '';
-    this.cargarSala(); // Encapsular la lógica en un método para claridad
+    this.cargarSala();
     this.getLoggedUserName();
+    this.getUserRole(); // Obtener el rol del usuario
   }
 
   cargarSala() {
     const sala = this.salaService.getSalaWithId(this.salaID);
 
     if (sala) {
-      this.salaNombre = sala.nombre; // Asegurarse de que el nombre se asigne correctamente
+      this.salaNombre = sala.nombre;
       this.alumnos = sala.alumnos || [];
     } else {
       console.error('No se encontró la sala con el ID proporcionado.');
@@ -56,9 +56,23 @@ export class ListadoAlumnosPage implements OnInit {
     this.loggedUserName = localStorage.getItem('loggedUser') || null;
   }
 
+  getUserRole() {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const loggedUser = this.loggedUserName;
+    const user = users.find((u: { fullName: string }) => u.fullName === loggedUser);
+
+    this.userRole = user ? user.role : null;
+    console.log('Rol del usuario:', this.userRole);
+  }
+
   agregarAlumno() {
+    if (this.userRole !== 'Profesor') {
+      console.error('Solo los profesores pueden agregar alumnos.');
+      return;
+    }
+
     if (!this.nombreAlumno.trim()) {
-      console.error('El nombre del alumno es obligatorio');
+      console.error('El nombre del alumno es obligatorio.');
       return;
     }
 
@@ -85,6 +99,11 @@ export class ListadoAlumnosPage implements OnInit {
   }
 
   generarQRCode() {
+    if (this.userRole !== 'Profesor') {
+      console.error('Solo los profesores pueden generar códigos QR.');
+      return;
+    }
+
     QRCode.toDataURL(this.salaID)
       .then((url) => {
         this.qrCodeUrl = url;
