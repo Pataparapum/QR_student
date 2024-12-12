@@ -3,8 +3,11 @@ import { SALA } from '../sala-clases/interface/salas';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { v4 as uuidv4 } from 'uuid';
-import { alumonInterface } from './interface/alumno.dto';
+import { alumnoInterface } from './interface/alumno.dto';
 import { salaInterface } from './interface/sala.dto';
+import { firstValueFrom } from 'rxjs';
+import { AlumnosControlService } from './alumnos-control.service';
+import { HttpUserService } from './http-user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +15,7 @@ import { salaInterface } from './interface/sala.dto';
 export class SalaService {
   salaArray: SALA[] = [];
 
-  constructor(private Storage: StorageService, private api:HttpClient) {
+  constructor(private Storage: StorageService, private api:HttpClient, private alumnoService:AlumnosControlService, private userService:HttpUserService) {
     this.getData();
   }
 
@@ -42,47 +45,71 @@ export class SalaService {
     return this.salaArray.find((sala) => sala.id === id) || null;
   }
 
-  addAlumno(id: string, alumno: alumonInterface) {
+  async addAlumno(id: string, correo:string) {
     const sala: SALA = this.getSalaWithId(id)!;
 
-    if (!sala.alumnos) {
-      sala.alumnos = [];
+    //saber si el alumno existe en la base de datos
+    let user = await this.userService.getUserForCorreo(correo);
+
+    if (!user) console.warn('el alumno no esta ingresado:', user);
+
+    const alumnoExist = await this.alumnoService.alumnoExiste(user?.id!) 
+
+    if (!alumnoExist) console.warn('El alumno no esta ingresado:', alumnoExist);
+    if (!sala.salas) sala.salas = [];
+
+    const alumno:salaInterface = {
+      curso: sala.nombre,
+      alumnoid: alumnoExist!
     }
 
     // Evitar agregar duplicados
-    const existe = sala.alumnos.some((a) => a.userId === alumno.userId);
-    if (!existe) {
+    const allAlumnos = this.api.get(`${this.url}/cursos/${sala.nombre}`);
 
-      const nuevaSala:salaInterface = {
-        curso: sala.nombre,
-        alumnoid: alumno.id!
-      }
+    const existe =
+      await firstValueFrom(allAlumnos)
+        .then((data:any) => {
+          for (let alumnos of data.data) {
+            if (alumnos.alumnoid === alumno.alumnoid && alumnos.curso === alumno.curso) return true
+          }
+          return false;
+        }).catch(err => {
+          return true;
+        })
 
-      this.api.post(`${this.url}`, nuevaSala );
-      sala.alumnos.push(alumno);
-      this.Storage.set('salas', this.salaArray);
-    } else {
-      console.warn('Intento de agregar alumno duplicado:', alumno);
-    }
+    if (existe) console.warn('Intento de agregar alumno duplicado:', alumno);  
 
+    sala.salas.push(alumno);
+    this.Storage.set('salas', this.salaArray);
+    
     return this.salaArray;
   }
 
-  findAlumnoForId(alumnoId: string, salaId: string): alumonInterface | null {
+  findAlumnoForId(alumnoId: string, salaId: string): salaInterface | null {
     const sala = this.getSalaWithId(salaId);
-    return sala?.alumnos?.find((alumno) => alumno.userId === alumnoId) || null;
+    return sala?.salas?.find((alumno) => alumno.alumnoid === alumnoId) || null;
   }
 
-  delete(salaId: string) {
+  async delete(salaId: string) {
     this.salaArray = this.salaArray.filter((sala) => sala.id !== salaId);
+
+    let borrar = this.api.delete(`${this.url}/${salaId}`);
+
+    const dato = await firstValueFrom(borrar).then();
+
     this.Storage.set('salas', this.salaArray); // Actualizar el almacenamiento
   }
 
-  updateSala(salaID: string, updatedSala: SALA) {
+  async updateSala(salaID: string, updatedSala: SALA) {
     const index = this.salaArray.findIndex((sala) => sala.id === salaID);
 
     if (index !== -1) {
       this.salaArray[index] = updatedSala; // Actualiza la sala en el array
+      
+      let update = this.api.put(`${this.url}/${salaID}`, updatedSala.salas);
+
+      const dato = await firstValueFrom(update).then()
+
       this.Storage.set('salas', this.salaArray); // Guarda los cambios en StorageService
     } else {
       console.error(`No se encontró la sala con ID: ${salaID}`);

@@ -1,5 +1,5 @@
 import { Data } from '@angular/router';
-import { alumonInterface } from './interface/alumno.dto';
+import { alumnoInterface } from './interface/alumno.dto';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,27 +18,55 @@ export class AlumnosControlService {
 
   constructor(private api:HttpClient) { }
 
-  alumno:alumonInterface = {
+  alumno:alumnoInterface = {
     full_name:"",
     userId:""
   }
 
-  crearAlumno(correo:string, alumno:alumonInterface): alumonInterface {
-     this.api.post<alumonInterface>(`${this.alumnosUrl}/${correo}`, alumno).pipe(
-      map((resp) => {
-        alumno.id = resp.id
-        alumno.full_name = resp.full_name,
-        alumno.userId = resp.userId
-      }),
-    )
+  async crearAlumno(correo:string, nuevoAlumno:alumnoInterface)  {
+     let add = this.api.post<alumnoInterface>(`${this.alumnosUrl}/${correo}`, nuevoAlumno)
+
+     const alumno = 
+      await firstValueFrom(add)
+        .then( (data:alumnoInterface) => {
+          return data;
+          
+        }).catch(err => {
+          return undefined
+        });
+
     return alumno
   }
 
   marcarAsistencia(asistencia:asistenciaInterface) {
-    return this.api.post(`${this.asistenciaUrl}`, asistencia).subscribe((data:any) => {
-      if (data.status == 201) return true;
-      return false;
-    })
+    let marcarAsistencia = this.api.post(`${this.asistenciaUrl}`, asistencia)
+
+    let setAsistencia = 
+      firstValueFrom(marcarAsistencia)
+      .then((data:any) => {
+        return true;
+      })
+      .catch(err => {
+        return false;
+      })
+
+    return setAsistencia
+  }
+
+  async alumnoExiste(userId:string) {
+    let datos = this.api.get<alumnoInterface[]>(`${this.alumnosUrl}`)
+
+    let alumnos:alumnoInterface[] = 
+      await firstValueFrom(datos)
+        .then(data => {
+          return data;
+        })
+
+    for (let alumno of alumnos) {
+      if (alumno.userId === userId) return alumno.id;
+    }
+
+    return undefined;
   }
     
 }

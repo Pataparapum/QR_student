@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+import { HttpUserService } from '../Services/http-user.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ export class HomePage implements OnInit {
   scannedData: string = ''; // Para almacenar el contenido escaneado
   loggedUserName: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api:HttpUserService) {}
 
   navigateToAbout() {
     this.router.navigate(['/login']);
@@ -30,11 +31,11 @@ export class HomePage implements OnInit {
     this.loggedUserName = storedUserName;
   }
 
-  logout() {
-    localStorage.removeItem('isLoggedIn');
+  async logout() {
     localStorage.removeItem('loggedUser');
+    await this.api.logout();
+
     this.router.navigate(['/login']);
-    console.log('La sesión se ha cerrado correctamente');
   }
 
   // Nueva funcionalidad: Iniciar el escaneo QR

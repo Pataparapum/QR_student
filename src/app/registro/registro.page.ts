@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RegistroService } from './registro.service';
+import { AlumnosControlService } from '../Services/alumnos-control.service';
+import { alumnoInterface } from '../Services/interface/alumno.dto';
 
 @Component({
   selector: 'app-registro',
@@ -28,7 +30,7 @@ export class RegistroPage implements OnInit {
     return re.test(email);
   }
 
-  register(event: MouseEvent) {
+  async register(event: MouseEvent) {
     event.preventDefault();
     this.errorMessage = null;
   
@@ -59,12 +61,11 @@ export class RegistroPage implements OnInit {
       return;
     }
   
-    const success = this.registroService.register(fullName, email, password, role);
+    const success = await this.registroService.register(fullName, email, password, role);
   
-    if (success) {
-      console.log('Registro exitoso');
-      this.logUsers();
-  
+    if (success) {  
+    this.logUsers();
+
       this.registerForm = {
         fullName: '',
         email: '',
@@ -72,7 +73,8 @@ export class RegistroPage implements OnInit {
         confirmPassword: '',
         role: ''
       };
-  
+
+      
       this.router.navigate(['/login']);
     } else {
       this.errorMessage = 'El usuario ya está registrado';

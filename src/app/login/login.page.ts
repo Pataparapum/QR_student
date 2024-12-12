@@ -52,11 +52,10 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    if (this.authService.ingresar(userName, password)) {
+    let userExist = await this.authService.ingresar(userName, password)
+    if (userExist) {
       
-      localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('loggedUser', userName); 
-
 
       console.log('Usuario logueado: ', userName);  
 

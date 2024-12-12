@@ -8,10 +8,10 @@ import { logInterface } from './interface/logDto';
   providedIn: 'root',
 })
 export class AuthenticateService {
+  
   constructor(private api:HttpUserService) {}
 
- 
-  ingresar(fullName: string, password: string): boolean {
+  async ingresar(fullName: string, password: string): Promise<boolean> {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const user:userInterface = users.find((u: { fullName: string; password: string }) => 
       u.fullName === fullName && u.password === password
@@ -24,7 +24,7 @@ export class AuthenticateService {
       }
 
       
-      this.api.login(login);
+      await this.api.login(login);
     }
 
   

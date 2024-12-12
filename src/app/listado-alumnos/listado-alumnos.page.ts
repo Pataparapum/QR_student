@@ -4,7 +4,7 @@ import { SalaService } from '../Services/sala.service';
 import { AlertController } from '@ionic/angular';
 import * as QRCode from 'qrcode';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
-import { alumonInterface } from '../Services/interface/alumno.dto';
+import { alumnoInterface } from '../Services/interface/alumno.dto';
 import { AlumnosControlService } from '../Services/alumnos-control.service';
 import { asistenciaInterface } from '../Services/interface/asistencia.dto';
 
@@ -14,7 +14,7 @@ import { asistenciaInterface } from '../Services/interface/asistencia.dto';
   styleUrls: ['./listado-alumnos.page.scss'],
 })
 export class ListadoAlumnosPage implements OnInit {
-  alumnos: alumonInterface[] = [];
+  alumnos: alumnoInterface[] = [];
   asiste:asistenciaInterface = {
     salaId: "",
     alumnoId: "",
@@ -56,13 +56,13 @@ export class ListadoAlumnosPage implements OnInit {
     this.loggedUserName = localStorage.getItem('loggedUser') || null;
   }
 
-  agregarAlumno() {
+  async agregarAlumno() {
     if (!this.nombreAlumno.trim()) {
       console.error('El nombre del alumno es obligatorio');
       return;
     }
 
-    const nuevoAlumno: alumonInterface = {
+    const nuevoAlumno: alumnoInterface = {
       full_name: this.nombreAlumno.trim(),
       userId:""
     };
@@ -70,12 +70,16 @@ export class ListadoAlumnosPage implements OnInit {
     const sala = this.salaService.getSalaWithId(this.salaID);
     if (sala) {
       sala.alumnos = sala.alumnos || [];
-      const existe = sala.alumnos.some((a:alumonInterface) => a.full_name === nuevoAlumno.full_name);
+      const existe = sala.alumnos.some((a:alumnoInterface) => a.full_name === nuevoAlumno.full_name);
       if (!existe) {
-        const alumno:alumonInterface = this.alumnoService.crearAlumno(this.correo, nuevoAlumno)
-        sala.alumnos.push(alumno);
-        this.salaService.addAlumno(this.salaID, alumno);
-        this.alumnos = sala.alumnos;
+        const alumno:alumnoInterface | undefined = await this.alumnoService.crearAlumno(this.correo, nuevoAlumno)
+
+        if (alumno){
+          sala.alumnos.push(alumno);
+          this.salaService.addAlumno(this.salaID, alumno);
+          this.alumnos = sala.alumnos;
+        } else console.warn('error al marcar la asistencia');
+        
       } else {
         console.warn('El alumno ya existe:', nuevoAlumno);
       }
@@ -97,7 +101,7 @@ export class ListadoAlumnosPage implements OnInit {
   marcarAsistencia(alumnoID: string) {
     const sala = this.salaService.getSalaWithId(this.salaID);
     if (sala) {
-      const alumno = sala.alumnos?.find((a:alumonInterface) => a.userId === alumnoID);
+      const alumno = sala.alumnos?.find((a:alumnoInterface) => a.userId === alumnoID);
       if (alumno) {
         this.asiste.asistencia = true
         this.asiste.alumnoId = alumno.id!
