@@ -10,6 +10,19 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <!-- Formulario de ingreso de alumno -->
+  <ion-card class="form-card">
+    <ion-card-header>
+      <ion-card-title>Agregar Alumno</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Correo Alumno</ion-label>
+        <ion-input [(ngModel)]="correo" placeholder="Ejemplo: alumno@gmail.com"></ion-input>
+      </ion-item>
+      <ion-button expand="block" color="primary" (click)="agregarAlumno()">Agregar Alumno</ion-button>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Formulario para profesores -->
   <div *ngIf="userRole === 'Profesor'">
@@ -20,7 +33,7 @@
       <ion-card-content>
         <ion-item>
           <ion-label position="stacked">Nombre del Alumno</ion-label>
-          <ion-input [(ngModel)]="nombreAlumno" placeholder="Ejemplo: Juan Pérez"></ion-input>
+          <ion-input [(ngModel)]="correo" placeholder="Ejemplo: Juan Pérez"></ion-input>
         </ion-item>
         <ion-button expand="block" color="primary" (click)="agregarAlumno()">Agregar Alumno</ion-button>
       </ion-card-content>

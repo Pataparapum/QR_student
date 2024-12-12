@@ -1,10 +1,11 @@
+import { HttpUserService } from './../Services/http-user.service';
 import { SALA } from './interface/salas';
 import { Component, OnInit } from '@angular/core';
 import { SalaService } from '../Services/sala.service';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { ALUMNO } from './interface/alumno';
-import { alumonInterface } from '../Services/interface/alumno.dto';
+import { salaInterface } from '../Services/interface/sala.dto';
+import { AlumnosControlService } from '../Services/alumnos-control.service';
 
 @Component({
   selector: 'app-sala-clases',
@@ -14,14 +15,17 @@ import { alumonInterface } from '../Services/interface/alumno.dto';
 export class SalaClasesPage implements OnInit {
   usuario = localStorage.getItem('loggedUser');
   salaArray: SALA[] = [];
-  sala: SALA = { nombre: '', id: '', alumnos: [], fechaCreacion: '' };
+  sala: SALA = { nombre: '', id: '', salas: [], fechaCreacion: '' };
+  loggedUserAlumnoId: string | undefined;
   loggedUserName: string | null = null;
   userRole: string | null = null;
 
   constructor(
     private salaDB: SalaService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private alumnoService: AlumnosControlService,
+    private userService:HttpUserService
   ) {}
 
   async ngOnInit() {
@@ -35,7 +39,7 @@ export class SalaClasesPage implements OnInit {
 
     if (this.userRole === 'Alumno') {
       this.salaArray = allSalas.filter((s) =>
-        (s.alumnos || []).some((alumno:alumonInterface) => alumno.full_name === this.loggedUserName)
+        (s.salas || []).some((alumno:salaInterface) => alumno.alumnoid === this.loggedUserAlumnoId)
       );
     } else {
       this.salaArray = allSalas;
@@ -61,7 +65,7 @@ export class SalaClasesPage implements OnInit {
     const nuevaSala: SALA = {
       nombre: this.sala.nombre.trim(),
       id: (Math.random() * 100000).toFixed(0),
-      alumnos: [],
+      salas: [],
       fechaCreacion: new Date().toLocaleDateString('es-ES', {
         weekday: 'long',
         year: 'numeric',
@@ -110,24 +114,21 @@ export class SalaClasesPage implements OnInit {
     this.salaArray = await this.salaDB.get();
   }
 
-  getLoggedUserName() {
-    const storedUserName = localStorage.getItem('loggedUser');
-    this.loggedUserName = storedUserName;
+  async getLoggedUserName() {
+    const storedUserName = JSON.parse(localStorage.getItem('users')!)
+    this.loggedUserName = storedUserName.username;
+    this.loggedUserAlumnoId = await this.alumnoService.alumnoExiste(storedUserName.id)
   }
 
   getUserRole() {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const loggedUser = this.loggedUserName;
-    const user = users.find((u: { fullName: string }) => u.fullName === loggedUser);
 
-    this.userRole = user ? user.role : null;
+    this.userRole = users.rol
     console.log('Rol del usuario:', this.userRole);
   }
 
-  logout() {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('loggedUser');
+  async logout() {
+    await this.userService.logout();
     this.router.navigate(['/login']);
-    console.log('Sesión cerrada');
   }
 }

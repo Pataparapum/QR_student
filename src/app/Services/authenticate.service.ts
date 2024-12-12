@@ -8,28 +8,31 @@ import { logInterface } from './interface/logDto';
   providedIn: 'root',
 })
 export class AuthenticateService {
-  constructor(private api:HttpUserService) {}
 
- 
-  ingresar(fullName: string, password: string): boolean {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user:userInterface = users.find((u: { fullName: string; password: string }) => 
-      u.fullName === fullName && u.password === password
-    );
+  private storageKey = 'users'; 
+  
+  constructor(private api:HttpUserService) {
+    if (!localStorage.getItem(this.storageKey)) {
+      localStorage.setItem(this.storageKey, JSON.stringify([]));
+    }
+  }
 
-    if (!!user) {
+  async ingresar(correo: string, password: string): Promise<boolean> {
       const login:logInterface = {
-        email:user.email,
-        password:user.password
+        email:correo,
+        password: password
+      }
+      
+      let user = await this.api.login(login);
+
+      if (user) {
+        const userData = await this.api.getUserForCorreo(correo);
+        localStorage.setItem(this.storageKey, JSON.stringify(userData));
+        return user
       }
 
-      
-      this.api.login(login);
+      return false
     }
-
-  
-    return !!user;
-  }
   
 
   isLoggedIn(): boolean {

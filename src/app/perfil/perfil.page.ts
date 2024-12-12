@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpUserService } from '../Services/http-user.service';
 
 @Component({
   selector: 'app-perfil',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 export class PerfilPage implements OnInit {
   userData: { fullName: string; email: string; role: string } | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService:HttpUserService) {}
 
   ngOnInit() {
     this.loadUserData();
@@ -18,20 +19,17 @@ export class PerfilPage implements OnInit {
   loadUserData() {
     // Recupera los usuarios registrados
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const loggedUser = localStorage.getItem('loggedUser');
-
+    
     // Encuentra el usuario logueado en el localStorage
-    this.userData = users.find((user: { fullName: string }) => user.fullName === loggedUser) || null;
+    this.userData = users
 
     if (!this.userData) {
       console.error('Usuario no encontrado');
     }
   }
 
-  logout() {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('loggedUser');
+  async logout() {
+    await this.userService.logout()
     this.router.navigate(['/login']);
-    console.log('Sesión cerrada');
   }
 }

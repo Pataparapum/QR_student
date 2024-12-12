@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpUserService } from '../Services/http-user.service';
 import { userInterface } from '../Services/interface/userDto';
+import { alumnoInterface } from '../Services/interface/alumno.dto';
+import { AlumnosControlService } from '../Services/alumnos-control.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,24 +18,28 @@ export class RegistroService {
   }
 
   
-  register(fullName: string, email: string, password: string, role: string): boolean {
+  async register(fullName: string, email:string, password: string, role: string): Promise<boolean> {
     const users = this.getUsers();
     const existingUser = users.find(user => user.fullName === fullName);
   
-    if (existingUser) {
-      return false; 
-    }
+    if (existingUser) return false; 
     
     const newUser:userInterface =  {
       email,
       username: fullName,
-      password
+      password,
+      rol: role
     }
 
-    this.api.registerUser(newUser);
+    let existInDatabase = await this.api.registerUser(newUser);
+
+    if (!existInDatabase)  return false;
+
+
 
     users.push({ fullName, email, password, role }); // Se agrega el rol
-    localStorage.setItem(this.storageKey, JSON.stringify(users));
+    const userData = await this.api.getUserForCorreo(email);
+    localStorage.setItem(this.storageKey, JSON.stringify(userData));
 
     return true; 
   }
