@@ -17,50 +17,60 @@
 
 <ion-content [fullscreen]="true" class="mobile-content">
   <!-- Formulario para crear sala -->
-  <div *ngIf="userRole === 'Profesor'">
-    <ion-card class="form-card">
-      <ion-card-header>
-        <ion-card-title>Crear Nueva Sala</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item lines="full" class="input-item">
-          <ion-label position="stacked">Nombre de la Sala</ion-label>
-          <ion-input [(ngModel)]="sala.nombre" placeholder="Ejemplo: Matemáticas 101"></ion-input>
-        </ion-item>
-        <ion-button expand="block" (click)="crearSala()" class="btn-crear">Crear Sala</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
+  @if (userRole === 'Profesor') {
+    <div>
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Crear Nueva Sala</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item lines="full" class="input-item">
+            <ion-label position="stacked">Nombre de la Sala</ion-label>
+            <ion-input [(ngModel)]="sala.nombre" placeholder="Ejemplo: Matemáticas 101"></ion-input>
+          </ion-item>
+          <ion-button expand="block" (click)="crearSala()" class="btn-crear">Crear Sala</ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  }
 
   <!-- Mensaje si no hay salas -->
-  <div *ngIf="salaArray.length === 0" class="empty-state">
-    <ion-icon name="cube-outline" class="empty-icon"></ion-icon>
-    <p>No hay salas para mostrar.</p>
-  </div>
+  @if (salaArray.length === 0) {
+    <div class="empty-state">
+      <ion-icon name="cube-outline" class="empty-icon"></ion-icon>
+      <p>No hay salas para mostrar.</p>
+    </div>
+  }
 
   <!-- Listado de clases -->
-  <div *ngIf="salaArray.length > 0" class="list-container">
-    <ion-card *ngFor="let s of salaArray" class="sala-card">
-      <ion-card-header>
-        <ion-card-title>{{ s.nombre }}</ion-card-title>
-        <!-- Usamos <ion-text> para mostrar la fecha -->
-        <ion-text color="medium">
-          <small>Creado el: {{ s.fechaCreacion }}</small>
-        </ion-text>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Alumnos registrados: {{ s.salas.length || 0 }}</p>
-        <div class="button-group">
-          <ion-button size="small" [routerLink]="['/listado-alumnos', s.id]">
-            <ion-icon slot="start" name="list-outline"></ion-icon>
-            Ver Alumnos
-          </ion-button>
-          <ion-button *ngIf="userRole === 'Profesor'" size="small" color="danger" (click)="confirmarEliminarSala(s.id)">
-            <ion-icon slot="start" name="trash-outline"></ion-icon>
-            Eliminar
-          </ion-button>
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
+  @if (salaArray.length > 0) {
+    <div class="list-container">
+      @for (s of salaArray; track s) {
+        <ion-card class="sala-card">
+          <ion-card-header>
+            <ion-card-title>{{ s.nombre }}</ion-card-title>
+            <!-- Usamos <ion-text> para mostrar la fecha -->
+            <ion-text color="medium">
+              <small>Creado el: {{ s.fechaCreacion }}</small>
+            </ion-text>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Alumnos registrados: {{ s.salas.length || 0 }}</p>
+            <div class="button-group">
+              <ion-button size="small" [routerLink]="['/listado-alumnos', s.id]">
+                <ion-icon slot="start" name="list-outline"></ion-icon>
+                Ver Alumnos
+              </ion-button>
+              @if (userRole === 'Profesor') {
+                <ion-button size="small" color="danger" (click)="confirmarEliminarSala(s.id)">
+                  <ion-icon slot="start" name="trash-outline"></ion-icon>
+                  Eliminar
+                </ion-button>
+              }
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+  }
 </ion-content>

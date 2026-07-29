@@ -38,8 +38,10 @@
   </ion-button>
 
   <!-- Mostrar el resultado del escaneo -->
-  <div *ngIf="scannedData" class="scan-result">
-    <h2>Resultado del escaneo:</h2>
-    <p>{{ scannedData }}</p>
-  </div>
+  @if (scannedData) {
+    <div class="scan-result">
+      <h2>Resultado del escaneo:</h2>
+      <p>{{ scannedData }}</p>
+    </div>
+  }
 </ion-content>

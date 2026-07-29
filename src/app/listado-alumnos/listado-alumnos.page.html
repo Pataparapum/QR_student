@@ -25,50 +25,59 @@
   </ion-card>
 
   <!-- Formulario para profesores -->
-  <div *ngIf="userRole === 'Profesor'">
-    <ion-card class="form-card">
-      <ion-card-header>
-        <ion-card-title>Agregar Alumno</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item>
-          <ion-label position="stacked">Nombre del Alumno</ion-label>
-          <ion-input [(ngModel)]="correo" placeholder="Ejemplo: Juan Pérez"></ion-input>
-        </ion-item>
-        <ion-button expand="block" color="primary" (click)="agregarAlumno()">Agregar Alumno</ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card class="qr-card">
-      <ion-card-header>
-        <ion-card-title>Generar Código QR</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-button expand="block" color="secondary" (click)="generarQRCode()">Generar QR</ion-button>
-        <div *ngIf="qrCodeUrl" class="qr-container">
-          <img [src]="qrCodeUrl" alt="Código QR de la sala" />
-        </div>
-      </ion-card-content>
-    </ion-card>
-  </div>
+  @if (userRole === 'Profesor') {
+    <div>
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Agregar Alumno</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Nombre del Alumno</ion-label>
+            <ion-input [(ngModel)]="correo" placeholder="Ejemplo: Juan Pérez"></ion-input>
+          </ion-item>
+          <ion-button expand="block" color="primary" (click)="agregarAlumno()">Agregar Alumno</ion-button>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="qr-card">
+        <ion-card-header>
+          <ion-card-title>Generar Código QR</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-button expand="block" color="secondary" (click)="generarQRCode()">Generar QR</ion-button>
+          @if (qrCodeUrl) {
+            <div class="qr-container">
+              <img [src]="qrCodeUrl" alt="Código QR de la sala" />
+            </div>
+          }
+        </ion-card-content>
+      </ion-card>
+    </div>
+  }
 
   <!-- Mensaje si no hay alumnos -->
-  <div *ngIf="alumnos.length === 0" class="empty-state">
-    <ion-icon name="people-outline" class="empty-icon"></ion-icon>
-    <p>No hay alumnos registrados aún.</p>
-  </div>
+  @if (alumnos.length === 0) {
+    <div class="empty-state">
+      <ion-icon name="people-outline" class="empty-icon"></ion-icon>
+      <p>No hay alumnos registrados aún.</p>
+    </div>
+  }
 
   <!-- Lista de alumnos -->
-  <ion-list *ngIf="alumnos.length > 0" class="alumnos-list">
-    <ion-item *ngFor="let alumno of alumnos">
-      <ion-label>
-        {{ alumno.full_name }}
-      </ion-label>
-      <ion-checkbox
-        slot="end"
-        [(ngModel)]="asiste.asistencia"
-        (ionChange)="marcarAsistencia(alumno.id!)">
-      </ion-checkbox>
-    </ion-item>
-  </ion-list>
+  @if (alumnos.length > 0) {
+    <ion-list class="alumnos-list">
+      @for (alumno of alumnos; track alumno) {
+        <ion-item>
+          <ion-label>
+            {{ alumno.full_name }}
+          </ion-label>
+          <ion-checkbox
+            slot="end"
+            [(ngModel)]="asiste.asistencia"
+            (ionChange)="marcarAsistencia(alumno.id!)">
+          </ion-checkbox>
+        </ion-item>
+      }
+    </ion-list>
+  }
 </ion-content>

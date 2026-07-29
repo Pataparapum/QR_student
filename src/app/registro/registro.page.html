@@ -21,9 +21,11 @@
 
             <h5 class="ion-text-center ion-margin-bottom">Crea tu cuenta</h5>
 
-            <div *ngIf="errorMessage" class="ion-padding" style="color: red;">
-              {{ errorMessage }}
-            </div>
+            @if (errorMessage) {
+              <div class="ion-padding" style="color: red;">
+                {{ errorMessage }}
+              </div>
+            }
 
             <!-- Campo Nombre -->
             <ion-item>
@@ -57,7 +59,7 @@
                 <ion-select-option value="Profesor">Profesor</ion-select-option>
               </ion-select>
             </ion-item>
-            
+
 
             <!-- Botón Registrarse -->
             <ion-button expand="block" color="primary" class="ion-margin-top" (click)="register($event)">
