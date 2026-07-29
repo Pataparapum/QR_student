@@ -51,7 +51,7 @@
     "@angular/cli": "20.3.32",
     "@angular/compiler-cli": "^20.3.26",
     "@angular/language-service": "^20.3.26",
-    "@capacitor/cli": "^6.2.1",
+    "@capacitor/cli": "^8.4.2",
     "@ionic/angular-toolkit": "^11.0.1",
     "@types/jasmine": "~5.1.15",
     "@types/qrcode": "^1.5.6",
